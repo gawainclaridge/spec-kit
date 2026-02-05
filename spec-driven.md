@@ -76,6 +76,7 @@ Spec Kit aligns with a structured 4-stage workflow that supports team collaborat
 
 ```text
 Stage 1 - Specification (Product)
+├── /speckit.project     → Creates project.md for multi-feature projects (optional)
 ├── /speckit.specify     → Creates draft spec.md
 └── /speckit.constitution → Creates draft constitution.md (optional at this stage)
 
@@ -218,7 +219,13 @@ Total: ~12 hours of documentation work
 # STAGE 1 - Specification (Product)
 # ============================================
 
+# For multi-feature projects, create project first (optional)
+/speckit.project messaging-platform
+
 # Create the feature specification (5 minutes)
+# Use --project flag to add to existing project:
+/speckit.specify --project messaging-platform Real-time chat system with message history and user presence
+# OR for single-feature projects:
 /speckit.specify Real-time chat system with message history and user presence
 
 # This automatically:

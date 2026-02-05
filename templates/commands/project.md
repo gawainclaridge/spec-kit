@@ -20,6 +20,15 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
+### Workflow Context (Unifyr Process)
+
+This is **Stage 1 (Specification)** of the Unifyr process:
+- **Team**: Product
+- **Purpose**: Create shared context for multi-feature projects
+- **Prerequisites**: None
+- **Output**: project.md with out-of-scope, shared constraints, features table
+- **Next step**: `/speckit.specify --project <name>` to add features
+
 ## Outline
 
 This command creates or manages a project.md file for multi-feature projects. A project groups related specifications that share common context, constraints, and out-of-scope items.

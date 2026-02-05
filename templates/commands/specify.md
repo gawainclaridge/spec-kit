@@ -49,8 +49,14 @@ Given that feature description, do this:
    - If NOT exists: Suggest running `/speckit.project <name>` first and abort
    - If exists:
      - Switch to project branch
+     - **Load project.md** from `specs/project-<name>/project.md`:
+       - Read "Out of Scope" section → Do NOT duplicate in spec's Non-Goals (reference project instead)
+       - Read "Shared Constraints" section → Apply to spec requirements
+       - Read "Target Users" section → Inherit if not overridden in spec
+       - Read "Jira Integration" section → Use Epic key if present
      - Find next available spec number within the project
      - Create spec at `specs/project-<name>/###-<feature>/spec.md`
+     - Add "Project Reference" section to spec linking back to project.md
      - Link spec to project.md in Features table
      - Skip branch creation (already on project branch)
 
@@ -125,9 +131,11 @@ Given that feature description, do this:
        Each criterion must be verifiable without implementation details
     7. Identify Key Entities (if data involved)
     8. Fill Non-Goals section
-       - Explicitly list what this feature does NOT include
+       - Explicitly list what this feature does NOT include (feature-specific)
        - Consider common scope creep areas
-       - If part of project, reference project.md for project-level exclusions
+       - **If part of project**: Do NOT duplicate project.md "Out of Scope" items; instead add:
+         `> See [project.md](../project.md) for project-level exclusions`
+       - Only add feature-specific non-goals that are not already covered at project level
     9. Initialize Sign-Off table with "Pending" statuses
     10. Initialize Changelog with version 1.0
     11. If `--project` mode: Update project.md Features table with new spec

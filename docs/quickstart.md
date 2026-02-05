@@ -11,7 +11,7 @@ Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
 
 | Stage | Focus | Key Activities |
 |-------|-------|----------------|
-| **Stage 1: Specification** | Product | Create draft spec.md, optionally draft constitution.md |
+| **Stage 1: Specification** | Product | Create project.md (optional for multi-feature), draft spec.md, optionally draft constitution.md |
 | **Stage 2: Review** | Product/Engineering/QA | `/speckit.clarify`, review spec, add acceptance criteria, sign off |
 | **Stage 3: Planning** | Engineering | Finalize constitution, create plan.md, define testing scenarios |
 | **Stage 4: Tasks** | Engineering | Generate tasks.md, link to issue tracker, implement |

@@ -44,6 +44,20 @@ This is **Stage 3 (Planning)** of the Unifyr process:
      - If found but Sign-Off section shows "Pending": WARN "Constitution not yet signed off - consider finalizing before proceeding"
    - **Spec sign-off check** (advisory): Check spec Sign-Off table status
      - If not signed off: WARN "Spec not yet signed off - plan may need revision after sign-off"
+   - **Check for project context**: Determine if feature is part of a project
+     - Check if current directory is under `specs/project-<name>/`
+     - If project.md exists, load and apply project context (see step 2b)
+
+2b. **Load project.md** (if feature is part of a project):
+   - Read `specs/project-<name>/project.md`:
+     - **Shared Constraints** → Validate plan doesn't violate these constraints
+     - **Shared Tech Decisions** → Inherit stack choices (if defined at project level)
+     - **Out of Scope** → Ensure plan doesn't include any excluded items
+     - **Jira Integration** → Use Epic key for linking
+   - Add "Project Alignment" check to plan validation:
+     - Plan MUST NOT include features listed in project Out of Scope
+     - Plan MUST respect Shared Constraints
+     - Plan SHOULD inherit Shared Tech Decisions unless spec explicitly overrides
 
 3. **Load context**: Read FEATURE_SPEC and `/memory/constitution.md`. Load IMPL_PLAN template (already copied).
 

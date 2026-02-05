@@ -57,6 +57,11 @@ Check for optional flags in the user input:
 2. **Load design documents**: Read from FEATURE_DIR:
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
    - **Optional**: data-model.md (entities), contracts/ (API endpoints), research.md (decisions), quickstart.md (test scenarios)
+   - **Check for project context**: Determine if feature is part of a project
+     - Check if current directory is under `specs/project-<name>/`
+     - If project.md exists, load project context:
+       - **Jira Integration** → Use project's Epic key for `[JIRA-EPIC-KEY]` placeholder
+       - **Shared Setup Tasks** → Reference any project-level shared setup if defined
    - Note: Not all projects have all documents. Generate tasks based on what's available.
 
 3. **Execute task generation workflow**:
