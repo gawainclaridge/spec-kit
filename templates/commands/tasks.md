@@ -1,6 +1,6 @@
 ---
 description: Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
-handoffs: 
+handoffs:
   - label: Analyze For Consistency
     agent: speckit.analyze
     prompt: Run a project analysis for consistency
@@ -9,6 +9,9 @@ handoffs:
     agent: speckit.implement
     prompt: Start the implementation in phases
     send: true
+  - label: Create Jira Tickets
+    agent: speckit.taskstoissues
+    prompt: Create Jira tickets from tasks
 scripts:
   sh: scripts/bash/check-prerequisites.sh --json
   ps: scripts/powershell/check-prerequisites.ps1 -Json
@@ -22,9 +25,34 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
+### Workflow Context (Unifyr Process)
+
+This is **Stage 4 (Tasks)** of the Unifyr process:
+- **Team**: Engineering only
+- **Prerequisites**:
+  - plan.md MUST exist (constitution was finalized in Stage 3)
+  - spec.md MUST exist (for user stories)
+- **Output**: tasks.md (or per-story files) with Jira placeholders
+- **Next steps**: `/speckit.taskstoissues`, `/speckit.implement`
+
 ## Outline
 
+### Argument Parsing
+
+Check for optional flags in the user input:
+- `--per-story`: Generate separate task files per user story (Unifyr-style)
+  - Creates `tasks.md` (master index) + `tasks-us1.md`, `tasks-us2.md`, etc.
+  - Each per-story file links to a Jira story ticket
+- Default (no flag): Single `tasks.md` file with all tasks organized by story internally
+
 1. **Setup**: Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+
+   **Check for config**: Read `.speckit/config.yaml` if exists for `tasks.format` setting:
+   ```yaml
+   tasks:
+     format: single  # or "per-story"
+   ```
+   The `--per-story` flag overrides config.
 
 2. **Load design documents**: Read from FEATURE_DIR:
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
@@ -42,8 +70,16 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Create parallel execution examples per user story
    - Validate task completeness (each user story has all needed tasks, independently testable)
 
-4. **Generate tasks.md**: Use `templates/tasks-template.md` as structure, fill with:
+4. **Add Jira placeholders**: Add Jira integration section to tasks.md:
+   - Epic placeholder: `[JIRA-EPIC-KEY]`
+   - Note that these are placeholders until `/speckit.taskstoissues` is run
+
+5. **Generate tasks.md** (or per-story files if configured):
+
+   **If single-file mode (default)**:
+   Use `templates/tasks-template.md` as structure, fill with:
    - Correct feature name from plan.md
+   - Jira Integration section with Epic placeholder
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
    - Phase 3+: One phase per user story (in priority order from spec.md)
@@ -55,13 +91,29 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Parallel execution examples per story
    - Implementation strategy section (MVP first, incremental delivery)
 
-5. **Report**: Output path to generated tasks.md and summary:
+   **If per-story mode (`--per-story` flag or config)**:
+   a. Generate master `tasks.md` with:
+      - Jira Integration section with Epic placeholder
+      - Phase 1: Setup tasks
+      - Phase 2: Foundational tasks
+      - User Story Reference Table (links to individual story files)
+      - Final Phase: Polish & cross-cutting
+   b. For each user story, generate `tasks-us[N].md` using `templates/story-tasks-template.md`:
+      - Story-specific Jira Story placeholder
+      - Acceptance criteria from spec.md
+      - Testing tasks from plan.md Testing Scenarios
+      - Implementation tasks for that story
+      - Completion checkpoint
+
+6. **Report**: Output path to generated tasks.md (and per-story files if applicable) and summary:
    - Total task count
    - Task count per user story
    - Parallel opportunities identified
    - Independent test criteria for each story
    - Suggested MVP scope (typically just User Story 1)
    - Format validation: Confirm ALL tasks follow the checklist format (checkbox, ID, labels, file paths)
+   - Jira integration status: placeholders ready for `/speckit.taskstoissues`
+   - If per-story mode: list of generated story task files
 
 Context for task generation: {ARGS}
 

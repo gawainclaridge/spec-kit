@@ -1,13 +1,16 @@
 ---
 description: Create or update the feature specification from a natural language feature description.
-handoffs: 
-  - label: Build Technical Plan
+handoffs:
+  - label: Clarify Spec (Stage 2)
+    agent: speckit.clarify
+    prompt: Review and clarify the specification
+    send: true
+  - label: Create Constitution
+    agent: speckit.constitution
+    prompt: Create project constitution with principles for...
+  - label: Build Technical Plan (Stage 3)
     agent: speckit.plan
     prompt: Create a plan for the spec. I am building with...
-  - label: Clarify Spec Requirements
-    agent: speckit.clarify
-    prompt: Clarify specification requirements
-    send: true
 scripts:
   sh: scripts/bash/create-new-feature.sh --json "{ARGS}"
   ps: scripts/powershell/create-new-feature.ps1 -Json "{ARGS}"
@@ -25,9 +28,33 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 The text the user typed after `/speckit.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
+### Argument Parsing
+
+Check for optional flags in the user input:
+- `--project <name>`: Add this spec to an existing project branch (multi-spec mode)
+  - Example: `/speckit.specify --project taskify Add user authentication`
+  - If project branch doesn't exist, suggest running `/speckit.project taskify` first
+
 Given that feature description, do this:
 
-1. **Generate a concise short name** (2-4 words) for the branch:
+1. **Check for constitution** (optional but recommended):
+   - Check if `.specify/memory/constitution.md` exists
+   - If NOT found:
+     - Display warning: "Constitution not found. Consider creating one with /speckit.constitution before planning."
+     - Continue with specification creation (do NOT block)
+   - If found: Note principles for spec alignment
+
+2. **If `--project` flag provided**:
+   - Check if project branch `project-<name>` exists
+   - If NOT exists: Suggest running `/speckit.project <name>` first and abort
+   - If exists:
+     - Switch to project branch
+     - Find next available spec number within the project
+     - Create spec at `specs/project-<name>/###-<feature>/spec.md`
+     - Link spec to project.md in Features table
+     - Skip branch creation (already on project branch)
+
+3. **Generate a concise short name** (2-4 words) for the branch:
    - Analyze the feature description and extract the most meaningful keywords
    - Create a 2-4 word short name that captures the essence of the feature
    - Use action-noun format when possible (e.g., "add-user-auth", "fix-payment-bug")
@@ -39,7 +66,7 @@ Given that feature description, do this:
      - "Create a dashboard for analytics" → "analytics-dashboard"
      - "Fix payment processing timeout bug" → "fix-payment-timeout"
 
-2. **Check for existing branches before creating new one**:
+4. **Check for existing branches before creating new one** (skip if `--project` mode):
 
    a. First, fetch all remote branches to ensure we have the latest information:
 
@@ -71,9 +98,9 @@ Given that feature description, do this:
    - The JSON output will contain BRANCH_NAME and SPEC_FILE paths
    - For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot")
 
-3. Load `templates/spec-template.md` to understand required sections.
+5. Load `templates/spec-template.md` to understand required sections.
 
-4. Follow this execution flow:
+6. Follow this execution flow:
 
     1. Parse user description from Input
        If empty: ERROR "No feature description provided"
@@ -97,11 +124,18 @@ Given that feature description, do this:
        Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
        Each criterion must be verifiable without implementation details
     7. Identify Key Entities (if data involved)
-    8. Return: SUCCESS (spec ready for planning)
+    8. Fill Non-Goals section
+       - Explicitly list what this feature does NOT include
+       - Consider common scope creep areas
+       - If part of project, reference project.md for project-level exclusions
+    9. Initialize Sign-Off table with "Pending" statuses
+    10. Initialize Changelog with version 1.0
+    11. If `--project` mode: Update project.md Features table with new spec
+    12. Return: SUCCESS (spec ready for clarification or planning)
 
-5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
+7. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
-6. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+8. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
 
    a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
 
@@ -193,7 +227,8 @@ Given that feature description, do this:
 
    d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
-7. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+9. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+   - If constitution was not found, remind user to create one before `/speckit.plan`
 
 **NOTE:** The script creates and checks out the new branch and initializes the spec file before writing.
 

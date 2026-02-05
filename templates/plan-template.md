@@ -1,9 +1,31 @@
+<!--
+  ARTIFACT STABILITY: Stable
+  This plan must NOT exceed the scope of the referenced specification.
+  If technical planning reveals need for scope expansion, STOP and amend spec.md first.
+  Changes require spec review if scope is affected.
+-->
+
 # Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+
+## Spec Reference
+
+**Source Specification**: `/specs/[###-feature-name]/spec.md`
+**Spec Version**: [Version from spec changelog]
+**Spec Sign-Off Date**: [Date spec was signed off, or "Pending"]
+
+### Scope Alignment Check
+
+- [ ] All plan items trace to requirements in spec.md
+- [ ] No features added beyond spec scope
+- [ ] If scope expansion needed: spec.md amended and re-approved
+
+> **WARNING**: If this plan requires features not in the spec, STOP and update the spec first.
+> Get Product sign-off on spec changes before continuing with planning.
 
 ## Summary
 
@@ -102,3 +124,51 @@ directories captured above]
 |-----------|------------|-------------------------------------|
 | [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
 | [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+
+## Testing Scenarios
+
+<!--
+  Define testing scenarios for each unit of work.
+  QA should review and extend these during Stage 3 (Planning).
+  These scenarios inform the task breakdown in /speckit.tasks.
+-->
+
+### User Story 1: [Title from spec]
+
+**Happy Path Tests:**
+1. **Scenario**: [Description]
+   - **Given**: [Precondition]
+   - **When**: [Action]
+   - **Then**: [Expected result]
+
+**Edge Case Tests:**
+1. **Scenario**: [Description]
+   - **Given**: [Edge condition]
+   - **When**: [Action]
+   - **Then**: [Expected handling]
+
+**Error Handling Tests:**
+1. **Scenario**: [Description]
+   - **Given**: [Error condition]
+   - **When**: [Action]
+   - **Then**: [Graceful failure behavior]
+
+### User Story 2: [Title from spec]
+
+[Same structure as above...]
+
+---
+
+## Sign-Off *(advisory)*
+
+<!--
+  Track team approvals for this implementation plan.
+  Sign-off is advisory and does not block workflow progression.
+-->
+
+| Stage | Team | Approver | Date | Status |
+|-------|------|----------|------|--------|
+| Plan Draft | Engineering | | | Pending |
+| Plan Review | QA | | | Pending |
+| Constitution Check | Engineering | | | Pending |
+| Final Sign-Off | All | | | Pending |

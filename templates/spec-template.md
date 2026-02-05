@@ -1,8 +1,16 @@
+<!--
+  ARTIFACT STABILITY: Very Stable
+  This specification is the source of truth for what to build and why.
+  Post sign-off changes require re-approval from all teams.
+-->
+
 # Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
+**Feature Branch**: `[###-feature-name]`
+**Created**: [DATE]
+**Status**: Draft
+**Version**: 1.0
+**Project**: [Optional - link to project.md if part of a multi-feature project]
 **Input**: User description: "$ARGUMENTS"
 
 ## User Scenarios & Testing *(mandatory)*
@@ -100,6 +108,32 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
+## Non-Goals *(mandatory)*
+
+<!--
+  Explicitly list what this feature does NOT include.
+  This prevents scope creep and clarifies boundaries.
+  Note: Project-level "out of scope" items belong in project.md if this spec is part of a project.
+-->
+
+- **NG-001**: This feature does NOT [explicit exclusion, e.g., "support bulk import of data"]
+- **NG-002**: This feature does NOT [explicit exclusion, e.g., "include administrative management UI"]
+- **NG-003**: This feature does NOT [explicit exclusion, e.g., "integrate with third-party analytics"]
+
+## Sign-Off *(advisory)*
+
+<!--
+  Track team approvals for this specification.
+  Sign-off is advisory and does not block workflow progression.
+-->
+
+| Stage | Team | Approver | Date | Status |
+|-------|------|----------|------|--------|
+| Spec Draft | Product | | | Pending |
+| Spec Review | Engineering | | | Pending |
+| Spec Review | QA | | | Pending |
+| Final Sign-Off | All | | | Pending |
+
 ## Success Criteria *(mandatory)*
 
 <!--
@@ -113,3 +147,14 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+## Changelog
+
+<!--
+  Track significant changes to this specification.
+  This spec is a LIVE DOCUMENT - update it as requirements evolve.
+-->
+
+| Version | Date | Author | Change Description |
+|---------|------|--------|-------------------|
+| 1.0 | [DATE] | [Author] | Initial draft |
