@@ -1,7 +1,13 @@
 ---
-
 description: "Task list template for feature implementation"
 ---
+
+<!--
+  ARTIFACT STABILITY: Volatile
+  This file is generated from plan.md and spec.md context.
+  DO NOT EDIT DIRECTLY - regenerate from plan changes using /speckit.tasks.
+  If tasks need changing, update the plan.md first and regenerate.
+-->
 
 # Tasks: [FEATURE NAME]
 
@@ -11,6 +17,13 @@ description: "Task list template for feature implementation"
 **Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+
+## Jira Integration
+
+**Project**: [JIRA-PROJECT-KEY]
+**Epic**: [JIRA-EPIC-KEY] - [Feature Name]
+
+> **Note**: Jira keys are placeholders. Run `/speckit.taskstoissues` to create tickets and update this file with actual keys.
 
 ## Format: `[ID] [P?] [Story] Description`
 
@@ -249,3 +262,22 @@ With multiple developers:
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+
+---
+
+## Per-Story Task Files (Optional)
+
+If configured with `tasks.format: per-story` or using `--per-story` flag, tasks are split into separate files:
+
+```text
+specs/[###-feature]/
+├── tasks.md              # This file (master index with Setup + Foundational phases)
+├── tasks-us1.md          # User Story 1 tasks (linked to Jira story)
+├── tasks-us2.md          # User Story 2 tasks (linked to Jira story)
+└── tasks-us3.md          # User Story 3 tasks (linked to Jira story)
+```
+
+Each per-story file can be independently:
+- Linked to a specific Jira story ticket
+- Assigned to different team members
+- Tracked for completion status

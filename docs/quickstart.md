@@ -5,7 +5,16 @@ This guide will help you get started with Spec-Driven Development using Spec Kit
 > [!NOTE]
 > All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify` CLI auto-selects based on OS unless you pass `--script sh|ps`.
 
-## The 6-Step Process
+## The 4-Stage Process
+
+Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
+
+| Stage | Focus | Key Activities |
+|-------|-------|----------------|
+| **Stage 1: Specification** | Product | Create draft spec.md, optionally draft constitution.md |
+| **Stage 2: Review** | Product/Engineering/QA | `/speckit.clarify`, review spec, add acceptance criteria, sign off |
+| **Stage 3: Planning** | Engineering | Finalize constitution, create plan.md, define testing scenarios |
+| **Stage 4: Tasks** | Engineering | Generate tasks.md, link to issue tracker, implement |
 
 > [!TIP]
 > **Context Awareness**: Spec Kit commands automatically detect the active feature based on your current Git branch (e.g., `001-feature-name`). To switch between different specifications, simply switch Git branches.
@@ -29,13 +38,16 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script sh  # Force POSIX shell
 ```
 
-### Step 2: Define Your Constitution
+### Step 2: Define Your Constitution (Optional)
 
-**In your AI Agent's chat interface**, use the `/speckit.constitution` slash command to establish the core rules and principles for your project. You should provide your project's specific principles as arguments.
+**In your AI Agent's chat interface**, use the `/speckit.constitution` slash command to establish the core rules and principles for your project. This step is optional but recommended - you can create it before, during, or after creating your specification.
 
 ```markdown
 /speckit.constitution This project follows a "Library-First" approach. All features must be implemented as standalone libraries first. We use TDD strictly. We prefer functional programming patterns.
 ```
+
+> [!NOTE]
+> If you skip this step, `/speckit.specify` will warn you but continue. However, the constitution must exist before running `/speckit.plan`.
 
 ### Step 3: Create the Spec
 
@@ -67,6 +79,24 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 
 ```markdown
 /speckit.tasks
+```
+
+For larger teams, you can generate separate task files per user story:
+
+```markdown
+/speckit.tasks --per-story
+```
+
+Optionally, create Jira tickets or GitHub issues from your tasks:
+
+```markdown
+# Create GitHub issues (default)
+/speckit.taskstoissues
+# or explicitly:
+/speckit.taskstoissues --github
+
+# Create Jira tickets
+/speckit.taskstoissues --jira PROJ
 ```
 
 Optionally, validate the plan with `/speckit.analyze`:
@@ -149,6 +179,58 @@ Finally, implement the solution:
 /speckit.implement
 ```
 
+## Multi-Feature Projects
+
+For larger initiatives with multiple related features, use the `/speckit.project` command to create a shared project context:
+
+```markdown
+# Create a new project
+/speckit.project taskify
+
+# Add a spec to an existing project
+/speckit.specify --project taskify Add user authentication
+
+# List all specs in a project
+/speckit.project taskify --list
+
+# Add current spec to a project
+/speckit.project taskify --add-spec
+```
+
+This creates a project structure with shared context:
+
+```text
+specs/
+└── project-taskify/
+    ├── project.md           # Shared context, out-of-scope items
+    ├── 001-user-auth/       # First feature
+    │   ├── spec.md
+    │   ├── plan.md
+    │   └── tasks.md
+    └── 002-task-boards/     # Second feature
+        ├── spec.md
+        ├── plan.md
+        └── tasks.md
+```
+
+The `project.md` file contains:
+- **Out of Scope**: Project-level exclusions shared across all features
+- **Shared Constraints**: Technical and business constraints
+- **Features Table**: Links to all specs in the project
+- **Jira Integration**: Project-level Epic key
+
+## Jira Integration
+
+Spec Kit includes Jira placeholders in generated artifacts:
+
+| Artifact | Placeholder | Maps To |
+|----------|-------------|---------|
+| project.md | `[JIRA-EPIC-KEY]` | Epic |
+| tasks.md | `[JIRA-XXX]` | Story/Sub-task |
+| tasks-us*.md | `[JIRA-STORY-KEY]` | Story |
+
+Use `/speckit.taskstoissues --jira PROJ` to create actual tickets and update placeholders with real keys.
+
 ## Key Principles
 
 - **Be explicit** about what you're building and why
@@ -156,6 +238,7 @@ Finally, implement the solution:
 - **Iterate and refine** your specifications before implementation
 - **Validate** the plan before coding begins
 - **Let the AI agent handle** the implementation details
+- **Use projects** for multi-feature initiatives with shared context
 
 ## Next Steps
 

@@ -1,9 +1,12 @@
 ---
 description: Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.
-handoffs: 
-  - label: Build Specification
+handoffs:
+  - label: Build Specification (Stage 1)
     agent: speckit.specify
     prompt: Implement the feature specification based on the updated constitution. I want to build...
+  - label: Create Technical Plan (Stage 3)
+    agent: speckit.plan
+    prompt: Create a technical plan for the spec. I am building with...
 ---
 
 ## User Input
@@ -17,6 +20,20 @@ You **MUST** consider the user input before proceeding (if not empty).
 ## Outline
 
 You are updating the project constitution at `/memory/constitution.md`. This file is a TEMPLATE containing placeholder tokens in square brackets (e.g. `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]`). Your job is to (a) collect/derive concrete values, (b) fill the template precisely, and (c) propagate any amendments across dependent artifacts.
+
+### Workflow Context (Unifyr Process)
+
+The constitution can be created at different stages:
+- **Stage 1 (Specification)**: Draft constitution by Product team alongside specs (optional)
+- **Stage 3 (Planning)**: Finalize and sign off constitution before planning (required)
+
+Constitution MUST be finalized before `/speckit.plan` can proceed.
+
+The constitution includes:
+- Non-negotiable principles and rules
+- Definition of done
+- AI-specific guidelines
+- Engineering quality standards
 
 Follow this execution flow:
 
@@ -63,9 +80,24 @@ Follow this execution flow:
 
 7. Write the completed constitution back to `/memory/constitution.md` (overwrite).
 
-8. Output a final summary to the user with:
+8. **Add Sign-Off section** (if not present) to track team approvals:
+
+   ```markdown
+   ## Sign-Off
+
+   | Stage | Team | Approver | Date | Status |
+   |-------|------|----------|------|--------|
+   | Draft | Product | | | Pending |
+   | Review | Engineering | | | Pending |
+   | Review | QA | | | Pending |
+   | Final Sign-Off | All | | | Pending |
+   ```
+
+9. Output a final summary to the user with:
    - New version and bump rationale.
    - Any files flagged for manual follow-up.
+   - Sign-Off status (all Pending for new constitutions)
+   - Reminder: Constitution must be signed off before `/speckit.plan` can proceed
    - Suggested commit message (e.g., `docs: amend constitution to vX.Y.Z (principle additions + governance update)`).
 
 Formatting & Style Requirements:

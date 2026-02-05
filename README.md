@@ -258,21 +258,44 @@ Essential commands for the Spec-Driven Development workflow:
 | `/speckit.tasks`        | Generate actionable task lists for implementation                        |
 | `/speckit.implement`    | Execute all tasks to build the feature according to the plan             |
 
+#### Project Management Commands
+
+Commands for managing multi-feature projects:
+
+| Command                  | Description                                                              |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `/speckit.project`       | Create or manage a project definition for multi-feature projects         |
+| `/speckit.taskstoissues` | Convert tasks to GitHub issues or Jira tickets                           |
+
 #### Optional Commands
 
 Additional commands for enhanced quality and validation:
 
 | Command              | Description                                                                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `/speckit.clarify`   | Clarify underspecified areas (recommended before `/speckit.plan`; formerly `/quizme`)                                                |
+| `/speckit.clarify`   | Analyze spec for gaps and clarify underspecified areas (Stage 2 review process)                                                      |
 | `/speckit.analyze`   | Cross-artifact consistency & coverage analysis (run after `/speckit.tasks`, before `/speckit.implement`)                             |
 | `/speckit.checklist` | Generate custom quality checklists that validate requirements completeness, clarity, and consistency (like "unit tests for English") |
+
+#### Command Flags Reference
+
+Key flags for commonly used commands:
+
+| Command                  | Flag                   | Description                                              |
+| ------------------------ | ---------------------- | -------------------------------------------------------- |
+| `/speckit.specify`       | `--project <name>`     | Add spec to existing project branch instead of creating new branch |
+| `/speckit.tasks`         | `--per-story`          | Generate separate task files per user story (tasks-us1.md, etc.) |
+| `/speckit.project`       | `--list`               | List all specs in the project                            |
+| `/speckit.project`       | `--add-spec`           | Add current spec to the project                          |
+| `/speckit.taskstoissues` | `--jira <PROJECT-KEY>` | Create Jira tickets (Epic → Story → Sub-task hierarchy)  |
+| `/speckit.taskstoissues` | `--github`             | Create GitHub issues (default)                           |
 
 ### Environment Variables
 
 | Variable          | Description                                                                                                                                                                                                                                                                                            |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>\*\*Must be set in the context of the agent you're working with prior to using `/speckit.plan` or follow-up commands. |
+| `SPECIFY_FEATURE` | Override feature detection for non-Git repositories. Set to the feature directory name (e.g., `001-photo-albums`) to work on a specific feature when not using Git branches.<br/>**Must be set in the context of the agent you're working with prior to using `/speckit.plan` or follow-up commands. |
+| `SPECIFY_PROJECT` | Override project detection for multi-feature projects. Set to the project name (e.g., `taskify`) when working with project branches.                                                                                                                                                                 |
 
 ## 📚 Core Philosophy
 
@@ -589,8 +612,40 @@ This step creates a `tasks.md` file in your feature specification directory that
 - **File path specifications** - Each task includes the exact file paths where implementation should occur
 - **Test-driven development structure** - If tests are requested, test tasks are included and ordered to be written before implementation
 - **Checkpoint validation** - Each user story phase includes checkpoints to validate independent functionality
+- **Jira placeholders** - `[JIRA-EPIC-KEY]` and `[JIRA-XXX]` placeholders for issue tracking integration
 
 The generated tasks.md provides a clear roadmap for the `/speckit.implement` command, ensuring systematic implementation that maintains code quality and allows for incremental delivery of user stories.
+
+**Per-story task files (optional)**: You can configure task generation to create separate files per user story for larger teams:
+
+```text
+/speckit.tasks --per-story
+```
+
+This creates:
+- `tasks.md` - Master index with setup and foundational phases
+- `tasks-us1.md`, `tasks-us2.md`, etc. - Individual story task files
+
+You can also set this as the default in `.speckit/config.yaml`:
+
+```yaml
+tasks:
+  format: per-story  # or "single" (default)
+```
+
+### **STEP 6b (Optional):** Create issue tickets with /speckit.taskstoissues
+
+After generating tasks, you can automatically create GitHub issues or Jira tickets:
+
+```text
+# Create GitHub issues (default)
+/speckit.taskstoissues
+
+# Create Jira tickets
+/speckit.taskstoissues --jira PROJ
+```
+
+This will create tickets for each task and update the task files with actual ticket keys.
 
 ### **STEP 7:** Implementation
 

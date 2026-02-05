@@ -70,9 +70,46 @@ Today, practicing SDD requires assembling existing tools and maintaining discipl
 
 The key is treating specifications as the source of truth, with code as the generated output that serves the specification rather than the other way around.
 
+## The 4-Stage Workflow
+
+Spec Kit aligns with a structured 4-stage workflow that supports team collaboration:
+
+```text
+Stage 1 - Specification (Product)
+├── /speckit.specify     → Creates draft spec.md
+└── /speckit.constitution → Creates draft constitution.md (optional at this stage)
+
+Stage 2 - Review (Product/Engineering/QA)
+├── /speckit.clarify     → Analyzes spec for gaps
+├── Manual review of spec.md
+├── Add acceptance criteria, edge cases
+└── Sign off spec (advisory)
+
+Stage 3 - Planning (Engineering)
+├── /speckit.constitution → Finalize and sign off constitution (required)
+├── /speckit.plan        → Creates plan.md (requires constitution finalized)
+└── Testing scenarios defined
+
+Stage 4 - Tasks (Engineering)
+├── /speckit.tasks       → Creates tasks.md (or per-story files)
+├── /speckit.taskstoissues → Link to Jira/GitHub tickets
+└── /speckit.implement   → Execute tasks
+```
+
+### Artifact Stability
+
+Understanding artifact stability helps teams know what can change and when:
+
+| Artifact | Stability | Notes |
+|----------|-----------|-------|
+| constitution.md | Very Stable | Rarely changes after initial creation |
+| spec.md | Stable | Changes require review and sign-off |
+| plan.md | Moderate | Technical decisions may evolve |
+| tasks.md | Volatile | Regenerate from plan changes, don't edit directly |
+
 ## Streamlining SDD with Commands
 
-The SDD methodology is significantly enhanced through three powerful commands that automate the specification → planning → tasking workflow:
+The SDD methodology is significantly enhanced through powerful commands that automate the specification → planning → tasking workflow:
 
 ### The `/speckit.specify` Command
 
@@ -97,10 +134,67 @@ Once a feature specification exists, this command creates a comprehensive implem
 
 After a plan is created, this command analyzes the plan and related design documents to generate an executable task list:
 
-1. **Inputs**: Reads `plan.md` (required) and, if present, `data-model.md`, `contracts/`, and `research.md`
-2. **Task Derivation**: Converts contracts, entities, and scenarios into specific tasks
+1. **Inputs**: Reads `plan.md` (required), `spec.md` (required for user stories), and optionally `data-model.md`, `contracts/`, and `research.md`
+2. **Task Derivation**: Converts contracts, entities, and scenarios into specific tasks organized by user story
 3. **Parallelization**: Marks independent tasks `[P]` and outlines safe parallel groups
-4. **Output**: Writes `tasks.md` in the feature directory, ready for execution by a Task agent
+4. **Jira Placeholders**: Adds `[JIRA-EPIC-KEY]` and `[JIRA-XXX]` placeholders for issue tracking
+5. **Output**: Writes `tasks.md` (or per-story files) in the feature directory
+
+**Task Format Options:**
+
+- **Single file (default)**: All tasks in one `tasks.md`, organized by user story internally
+- **Per-story files**: Separate `tasks-us1.md`, `tasks-us2.md`, etc. for larger teams
+
+Configure via `.speckit/config.yaml`:
+```yaml
+tasks:
+  format: single  # or "per-story"
+```
+
+Or use the `--per-story` flag:
+```bash
+/speckit.tasks --per-story
+```
+
+### The `/speckit.project` Command
+
+For multi-feature projects that share context, constraints, and out-of-scope items:
+
+1. **Project Creation**: Creates a `project-<name>` branch and `specs/project-<name>/` directory
+2. **Shared Context**: Generates `project.md` with out-of-scope items, shared constraints, and features table
+3. **Feature Management**: Lists and manages specs within the project
+
+```bash
+# Create a new project
+/speckit.project taskify
+
+# Add a spec to an existing project
+/speckit.specify --project taskify Add user authentication
+
+# List all specs in a project
+/speckit.project taskify --list
+
+# Add current spec to an existing project
+/speckit.project taskify --add-spec
+```
+
+### The `/speckit.taskstoissues` Command
+
+Converts tasks into issue tracker tickets:
+
+1. **GitHub Issues** (default): Creates issues in the repository matching the Git remote
+2. **Jira Tickets**: Creates Epic → Story → Sub-task hierarchy when `--jira <PROJECT-KEY>` is provided
+3. **Placeholder Updates**: Replaces `[JIRA-XXX]` placeholders with actual ticket keys
+
+```bash
+# Create GitHub issues (default)
+/speckit.taskstoissues
+# or explicitly:
+/speckit.taskstoissues --github
+
+# Create Jira tickets
+/speckit.taskstoissues --jira PROJ
+```
 
 ### Example: Building a Chat Feature
 
@@ -125,7 +219,7 @@ Total: ~12 hours of documentation work
 
 # This automatically:
 # - Creates branch "003-chat-system"
-# - Generates specs/003-chat-system/spec.md
+# - Generates specs/003-chat-system/spec.md with Non-Goals, Sign-Off, Changelog
 # - Populates it with structured requirements
 
 # Step 2: Generate implementation plan (5 minutes)
@@ -135,21 +229,57 @@ Total: ~12 hours of documentation work
 /speckit.tasks
 
 # This automatically creates:
-# - specs/003-chat-system/plan.md
+# - specs/003-chat-system/plan.md (with Testing Scenarios, Sign-Off)
 # - specs/003-chat-system/research.md (WebSocket library comparisons)
 # - specs/003-chat-system/data-model.md (Message and User schemas)
 # - specs/003-chat-system/contracts/ (WebSocket events, REST endpoints)
 # - specs/003-chat-system/quickstart.md (Key validation scenarios)
-# - specs/003-chat-system/tasks.md (Task list derived from the plan)
+# - specs/003-chat-system/tasks.md (Task list with Jira placeholders)
+
+# Step 4 (Optional): Create Jira tickets
+/speckit.taskstoissues --jira CHAT
 ```
 
 In 15 minutes, you have:
 
-- A complete feature specification with user stories and acceptance criteria
-- A detailed implementation plan with technology choices and rationale
+- A complete feature specification with user stories, non-goals, and acceptance criteria
+- A detailed implementation plan with technology choices, testing scenarios, and rationale
 - API contracts and data models ready for code generation
 - Comprehensive test scenarios for both automated and manual testing
 - All documents properly versioned in a feature branch
+- Jira placeholders ready for ticket creation
+
+### Example: Multi-Feature Project
+
+For larger initiatives with multiple related features:
+
+```bash
+# Create the project
+/speckit.project messaging-platform
+
+# Add features to the project
+/speckit.specify --project messaging-platform Real-time chat system
+/speckit.specify --project messaging-platform User presence tracking
+/speckit.specify --project messaging-platform Message search and history
+
+# List all features
+/speckit.project messaging-platform --list
+```
+
+This creates:
+
+```text
+specs/project-messaging-platform/
+├── project.md              # Shared context, out-of-scope
+├── 001-real-time-chat/
+│   ├── spec.md
+│   ├── plan.md
+│   └── tasks.md
+├── 002-user-presence/
+│   └── ...
+└── 003-message-search/
+    └── ...
+```
 
 ### The Power of Structured Automation
 
@@ -159,8 +289,34 @@ These commands don't just save time—they enforce consistency and completeness:
 2. **Traceable Decisions**: Every technical choice links back to specific requirements
 3. **Living Documentation**: Specifications stay in sync with code because they generate it
 4. **Rapid Iteration**: Change requirements and regenerate plans in minutes, not days
+5. **Team Collaboration**: Sign-off sections and advisory workflows support multi-team review processes
+6. **Issue Tracking Integration**: Jira placeholders and `/speckit.taskstoissues` bridge spec artifacts to project management
 
 The commands embody SDD principles by treating specifications as executable artifacts rather than static documents. They transform the specification process from a necessary evil into the driving force of development.
+
+### Branch Strategies
+
+Spec Kit supports two branch strategies:
+
+**Single-spec branches (default):**
+```text
+main
+├── 001-user-auth        → specs/001-user-auth/spec.md
+├── 002-payment-flow     → specs/002-payment-flow/spec.md
+└── 003-dashboard        → specs/003-dashboard/spec.md
+```
+
+**Multi-spec project branches (via `--project`):**
+```text
+main
+└── project-taskify      → specs/project-taskify/
+                            ├── project.md (shared context)
+                            ├── 001-user-management/spec.md
+                            ├── 002-task-boards/spec.md
+                            └── 003-notifications/spec.md
+```
+
+Choose project branches when multiple features share significant context, constraints, or are part of a larger initiative.
 
 ### Template-Driven Quality: How Structure Constrains LLMs for Better Outcomes
 
