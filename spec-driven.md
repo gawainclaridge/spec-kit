@@ -211,10 +211,14 @@ Here's how these commands transform the traditional development workflow:
 Total: ~12 hours of documentation work
 ```
 
-**SDD with Commands Approach:**
+**SDD with Commands Approach (4-Stage Process):**
 
 ```bash
-# Step 1: Create the feature specification (5 minutes)
+# ============================================
+# STAGE 1 - Specification (Product)
+# ============================================
+
+# Create the feature specification (5 minutes)
 /speckit.specify Real-time chat system with message history and user presence
 
 # This automatically:
@@ -222,11 +226,28 @@ Total: ~12 hours of documentation work
 # - Generates specs/003-chat-system/spec.md with Non-Goals, Sign-Off, Changelog
 # - Populates it with structured requirements
 
-# Step 2: Generate implementation plan (5 minutes)
-/speckit.plan WebSocket for real-time messaging, PostgreSQL for history, Redis for presence
+# Optionally create a draft constitution (if not already done)
+/speckit.constitution
 
-# Step 3: Generate executable tasks (5 minutes)
-/speckit.tasks
+# ============================================
+# STAGE 2 - Review (Product/Engineering/QA)
+# ============================================
+
+# Analyze spec for gaps and clarify requirements
+/speckit.clarify
+
+# Manual review: Add acceptance criteria, edge cases
+# Sign off spec (advisory)
+
+# ============================================
+# STAGE 3 - Planning (Engineering)
+# ============================================
+
+# Finalize constitution (required before planning)
+/speckit.constitution
+
+# Generate implementation plan (5 minutes)
+/speckit.plan WebSocket for real-time messaging, PostgreSQL for history, Redis for presence
 
 # This automatically creates:
 # - specs/003-chat-system/plan.md (with Testing Scenarios, Sign-Off)
@@ -234,20 +255,31 @@ Total: ~12 hours of documentation work
 # - specs/003-chat-system/data-model.md (Message and User schemas)
 # - specs/003-chat-system/contracts/ (WebSocket events, REST endpoints)
 # - specs/003-chat-system/quickstart.md (Key validation scenarios)
+
+# ============================================
+# STAGE 4 - Tasks (Engineering)
+# ============================================
+
+# Generate executable tasks (5 minutes)
+/speckit.tasks
+
+# This creates:
 # - specs/003-chat-system/tasks.md (Task list with Jira placeholders)
 
-# Step 4 (Optional): Create Jira tickets
+# Create Jira tickets (optional)
 /speckit.taskstoissues --jira CHAT
+
+# Implement the feature
+/speckit.implement
 ```
 
-In 15 minutes, you have:
+Following the 4-stage process, you have:
 
-- A complete feature specification with user stories, non-goals, and acceptance criteria
-- A detailed implementation plan with technology choices, testing scenarios, and rationale
-- API contracts and data models ready for code generation
-- Comprehensive test scenarios for both automated and manual testing
+- **Stage 1**: A complete feature specification with user stories, non-goals, and acceptance criteria
+- **Stage 2**: Clarified requirements with team review and sign-off
+- **Stage 3**: A detailed implementation plan with technology choices, testing scenarios, and finalized constitution
+- **Stage 4**: Executable tasks, Jira tickets, and implemented code
 - All documents properly versioned in a feature branch
-- Jira placeholders ready for ticket creation
 
 ### Example: Multi-Feature Project
 
