@@ -29,6 +29,23 @@ The constitution can be created at different stages:
 
 Constitution MUST be finalized before `/speckit.plan` can proceed.
 
+### What is a Constitution?
+
+The constitution defines **how** you build a specific initiative. It is engineering-managed and provides detailed guiding principles to drive the plan stage.
+
+| Aspect | Constitution | Agent File (CLAUDE.md etc.) | Project.md |
+|--------|-------------|---------------------------|------------|
+| **Scope** | Project/epic set | Entire product/repo | Multi-feature project |
+| **Owner** | Engineering | Engineering | Product |
+| **About** | The HOW - principles for this initiative | Universal product truths | The WHAT - shared feature context |
+| **Changes** | Per initiative, updated as principles evolve | Rarely, auto-regenerated from plans | Stable after creation |
+
+**Key distinctions**:
+- The **agent file** captures universal product architecture and engineering truths (e.g., "We deploy to AWS", "All APIs are REST"). The constitution captures initiative-specific principles (e.g., "Library-First", "TDD mandatory for this project").
+- **Project.md** captures the what (features, constraints, out-of-scope). The constitution captures the how (quality gates, development approach, non-negotiable rules).
+
+**Preparation guidance**: Before drafting a constitution, clean up existing repo documentation first. Document YOUR architecture decisions, not generic best practices. Start with what you actually enforce for this initiative.
+
 The constitution includes:
 - Non-negotiable principles and rules
 - Definition of done

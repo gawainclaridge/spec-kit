@@ -19,7 +19,8 @@
 # 3. Agent File Management
 #    - Creates new agent context files from templates when needed
 #    - Updates existing agent files with new project information
-#    - Preserves manual additions and custom configurations
+#    - Preserves manual additions, custom configurations, and the
+#      Product Architecture section (<!-- ARCHITECTURE START/END --> markers)
 #    - Supports multiple AI agent formats and directory structures
 #
 # 4. Content Generation

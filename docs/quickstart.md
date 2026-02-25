@@ -38,16 +38,49 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME> --script sh  # Force POSIX shell
 ```
 
+### Step 1b: Set Up Your Agent File (Recommended)
+
+Your agent file (e.g., `CLAUDE.md` for Claude Code) should contain your **product-level architecture** and universal engineering truths. This is the permanent, high-level "who we are as a product" document that rarely changes.
+
+Think of it as the product's architectural identity:
+- "We use a microservices architecture deployed on AWS"
+- "All APIs follow REST conventions with OpenAPI specs"
+- "We use PostgreSQL for persistent storage"
+
+> [!TIP]
+> The agent file is auto-generated from plan.md files, but includes a `Product Architecture` section at the top that you maintain manually. This section persists across regenerations.
+
 ### Step 2: Define Your Constitution (Optional)
 
-**In your AI Agent's chat interface**, use the `/speckit.constitution` slash command to establish the core rules and principles for your project. This step is optional but recommended - you can create it before, during, or after creating your specification.
+The **constitution** is different from your agent file. It defines **how you build this initiative** - the guiding principles for a specific project or epic set, detailed enough to guide the planning stage.
+
+**In your AI Agent's chat interface**, use the `/speckit.constitution` slash command:
 
 ```markdown
 /speckit.constitution This project follows a "Library-First" approach. All features must be implemented as standalone libraries first. We use TDD strictly. We prefer functional programming patterns.
 ```
 
+#### Understanding the Three Context Files
+
+| File | Owner | About | Scope |
+|------|-------|-------|-------|
+| **Agent file** (CLAUDE.md etc.) | Engineering | Universal product truths | Entire product/repo |
+| **Constitution** | Engineering | **The HOW** - principles for this initiative | Project/epic set |
+| **Project.md** | Product | **The WHAT** - shared feature context | Multi-feature project |
+
+- **Agent file**: High-level product architecture, universal engineering truths. Rarely changes. Engineering-maintained.
+- **Constitution**: Initiative-specific principles, quality gates, development approach. Guides Stage 3 planning. Engineering-managed.
+- **Project.md**: Feature list, shared constraints, out-of-scope items, Jira Epic. Product-managed.
+
+#### Practical Guidance
+
+- Expect to invest 2-3 days of senior engineering time on the constitution
+- Clean up existing repo documentation first (README, architecture notes) before drafting
+- Document YOUR architecture decisions, not generic best practices
+- Start with 5-7 focused principles that you actually enforce today
+
 > [!NOTE]
-> If you skip this step, `/speckit.specify` will warn you but continue. However, the constitution must exist before running `/speckit.plan`.
+> The constitution is optional in Stage 1 but **must be finalized before** `/speckit.plan` (Stage 3). If you skip this step, `/speckit.specify` will warn you but continue.
 
 ### Step 3: Create the Spec
 
@@ -239,6 +272,7 @@ Use `/speckit.taskstoissues --jira PROJ` to create actual tickets and update pla
 - **Validate** the plan before coding begins
 - **Let the AI agent handle** the implementation details
 - **Use projects** for multi-feature initiatives with shared context
+- **Handle changes gracefully** - see [Managing Changes Mid-Flight](../README.md#managing-changes-mid-flight) for when to amend vs restart
 
 ## Next Steps
 

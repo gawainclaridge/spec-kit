@@ -62,6 +62,85 @@ Check for optional flags in the user input:
 
 ---
 
+## Complexity Scoring
+
+Before creating tickets, evaluate each user story's complexity using a Fibonacci scale. This gives teams a shared sizing language without requiring velocity tracking.
+
+### Scale
+
+| Points | Meaning | Pre-AI Engineering Equivalent |
+|--------|---------|-------------------------------|
+| 1 | Trivial change | Few hours |
+| 2 | Small, well-understood | Half a day |
+| 3 | Moderate, some unknowns | 1-2 days |
+| 5 | Significant, multiple components | 2-3 days |
+| 8 | Large, cross-cutting | ~5 days |
+| 13 | Very large, high uncertainty | 1-2 weeks |
+| 20 | Epic-sized, should be broken down | 2+ weeks |
+
+**Calibration**: 8 points = approximately 5 days of traditional engineering effort (pre-AI assistance).
+
+### Scoring Heuristic
+
+For each story, evaluate these factors and take the median:
+
+| Factor | Low (1-2) | Medium (3-5) | High (8-13) | Very High (20) |
+|--------|-----------|--------------|-------------|----------------|
+| Sub-task count | 1-3 tasks | 4-6 tasks | 7-10 tasks | 10+ tasks |
+| Schema changes | None | 1-2 entities | 3-5 entities | Major redesign |
+| API surface | 0-1 endpoints | 2-3 endpoints | 4-6 endpoints | New service |
+| UI complexity | None / minor | Single view | Multiple views | Complex interactions |
+| Dependencies | Self-contained | 1-2 shared components | Cross-story deps | External integrations |
+| Risk / novelty | Well-known patterns | Some new tech | Significant unknowns | Research required |
+
+**Process**: Evaluate each factor per story, take the median value, round to the nearest Fibonacci number.
+
+### Feature Sizing Guidance
+
+Teams report a quality cliff when features exceed approximately 5 days of traditional engineering effort (~8 story points). If the total story points across all stories suggest the feature exceeds this threshold, recommend breaking the feature into multiple specs using `/speckit.project` and the `--project` flag on `/speckit.specify`. This guidance is advisory, not blocking.
+
+### Output
+
+After ticket creation, output a complexity summary table:
+
+```text
+| Story | Points | Rationale |
+|-------|--------|-----------|
+| US1 - [Title] | [N] | [Key factor driving the score] |
+| US2 - [Title] | [N] | [Key factor driving the score] |
+| **Total** | **[Sum]** | |
+```
+
+If total exceeds 20 points, add advisory: "Consider breaking this feature into smaller specs via `--project` mode."
+
+---
+
+## Story Design Principles
+
+Stories created in the issue tracker should be **demo-able vertical slices**, not horizontal layers.
+
+### Rules
+
+- Each story MUST be independently demonstrable to QA/Product
+- Story description links to the relevant spec.md section for acceptance criteria (do NOT duplicate full AC in the ticket)
+- Story description includes brief **Demo Criteria**: 1-2 sentences describing what can be shown when complete
+- Stories should represent user-visible value, not technical layers
+
+### Anti-Patterns (avoid these story titles)
+
+- "Implement database schema" (horizontal layer, not demonstrable)
+- "Create API endpoints" (technical task, not user value)
+- "Build frontend components" (partial, not independently testable)
+- "Write unit tests" (supporting task, not a story)
+
+### Good Story Examples
+
+- "User can register and log in" (demo-able: show the registration flow)
+- "User can create and view projects" (demo-able: create a project, see it listed)
+- "User can drag tasks between board columns" (demo-able: drag and drop a card)
+
+---
+
 ## Jira Workflow
 
 When `--jira <PROJECT-KEY>` is provided:
@@ -89,7 +168,8 @@ Epic (Feature)
 2. **For each User Story phase**:
    - Create Story ticket linked to Epic
    - Title: User Story title from spec.md
-   - Description: Acceptance criteria from spec.md
+   - Description: Spec Reference link to the relevant section in spec.md + Demo Criteria (1-2 sentences describing what can be demonstrated when complete). Do NOT duplicate full acceptance criteria in the ticket.
+   - Story Points: Set using the standard Jira `Story Points` estimate field with the Fibonacci score from the Complexity Scoring step
 
 3. **For each task within a story**:
    - Create Sub-task linked to Story

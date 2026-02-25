@@ -7,7 +7,12 @@ Update agent context files with information from plan.md (PowerShell version)
 Mirrors the behavior of scripts/bash/update-agent-context.sh:
  1. Environment Validation
  2. Plan Data Extraction
- 3. Agent File Management (create from template or update existing)
+ 3. Agent File Management
+    - Creates new agent context files from templates when needed
+    - Updates existing agent files with new project information
+    - Preserves manual additions, custom configurations, and the
+      Product Architecture section (<!-- ARCHITECTURE START/END --> markers)
+    - Supports multiple AI agent formats and directory structures
  4. Content Generation (technology stack, recent changes, timestamp)
  5. Multi-Agent Support (claude, gemini, copilot, cursor-agent, qwen, opencode, codex, windsurf, kilocode, auggie, roo, codebuddy, amp, shai, q, bob, qoder)
 

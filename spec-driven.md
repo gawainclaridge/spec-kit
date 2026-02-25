@@ -108,6 +108,8 @@ Understanding artifact stability helps teams know what can change and when:
 | plan.md | Moderate | Technical decisions may evolve |
 | tasks.md | Volatile | Regenerate from plan changes, don't edit directly |
 
+> **Handling changes mid-flight**: See [Managing Changes Mid-Flight](README.md#managing-changes-mid-flight) in the README for when to amend vs restart, the impact matrix, and team coordination practices.
+
 ## Streamlining SDD with Commands
 
 The SDD methodology is significantly enhanced through powerful commands that automate the specification → planning → tasking workflow:
@@ -120,6 +122,7 @@ This command transforms a simple feature description (the user-prompt) into a co
 2. **Branch Creation**: Generates a semantic branch name from your description and creates it automatically
 3. **Template-Based Generation**: Copies and customizes the feature specification template with your requirements
 4. **Directory Structure**: Creates the proper `specs/[branch-name]/` structure for all related documents
+5. **Feature Sizing**: Features that exceed approximately 5 days of traditional engineering effort tend to produce lower quality output. For larger features, use `/speckit.project` to break them into multiple focused specs.
 
 ### The `/speckit.plan` Command
 
@@ -181,11 +184,13 @@ For multi-feature projects that share context, constraints, and out-of-scope ite
 
 ### The `/speckit.taskstoissues` Command
 
-Converts tasks into issue tracker tickets:
+Converts tasks into issue tracker tickets with complexity scoring and demo-able story design:
 
-1. **GitHub Issues** (default): Creates issues in the repository matching the Git remote
-2. **Jira Tickets**: Creates Epic → Story → Sub-task hierarchy when `--jira <PROJECT-KEY>` is provided
-3. **Placeholder Updates**: Replaces `[JIRA-XXX]` placeholders with actual ticket keys
+1. **Complexity Scoring**: Evaluates each story using Fibonacci points (1-20) before creating tickets. Stories include Story Points in the standard Jira estimate field.
+2. **Demo-able Stories**: Each story is created as a vertical slice that can be independently demonstrated to QA/Product. Story descriptions link to spec.md for acceptance criteria rather than duplicating them.
+3. **GitHub Issues** (default): Creates issues in the repository matching the Git remote
+4. **Jira Tickets**: Creates Epic → Story → Sub-task hierarchy when `--jira <PROJECT-KEY>` is provided
+5. **Placeholder Updates**: Replaces `[JIRA-XXX]` placeholders with actual ticket keys
 
 ```bash
 # Create GitHub issues (default)

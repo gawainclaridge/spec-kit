@@ -90,49 +90,67 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 - Better tool management with `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
 - Cleaner shell configuration
 
-### 2. Establish project principles
+### The 4-Stage Process
+
+Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
+
+| Stage | Focus | Key Commands |
+|-------|-------|-------------|
+| **Stage 1: Specification** | Product | `/speckit.project`, `/speckit.specify`, `/speckit.constitution` |
+| **Stage 2: Review** | Product/Engineering/QA | `/speckit.clarify` |
+| **Stage 3: Planning** | Engineering | `/speckit.plan` |
+| **Stage 4: Tasks** | Engineering | `/speckit.tasks`, `/speckit.taskstoissues`, `/speckit.implement` |
+
+### 2. Create specifications (Stage 1: Specification)
 
 Launch your AI assistant in the project directory. The `/speckit.*` commands are available in the assistant.
 
-Use the **`/speckit.constitution`** command to create your project's governing principles and development guidelines that will guide all subsequent development.
+Set up your **agent file** (e.g., `CLAUDE.md`) with your product-level architecture and universal engineering truths. Then use **`/speckit.constitution`** to define how you'll build this initiative:
 
 ```bash
 /speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
 ```
 
-### 3. Create the spec
-
-Use the **`/speckit.specify`** command to describe what you want to build. Focus on the **what** and **why**, not the tech stack.
+Use **`/speckit.specify`** to describe what you want to build. Focus on the **what** and **why**, not the tech stack:
 
 ```bash
 /speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
 ```
 
-### 4. Create a technical implementation plan
+For multi-feature projects, use **`/speckit.project`** first to create shared context across features.
 
-Use the **`/speckit.plan`** command to provide your tech stack and architecture choices.
+### 3. Review and refine (Stage 2: Review)
+
+Use **`/speckit.clarify`** to identify and resolve ambiguities in your specification before planning:
+
+```bash
+/speckit.clarify Focus on security and performance requirements.
+```
+
+### 4. Create implementation plan (Stage 3: Planning)
+
+Use the **`/speckit.plan`** command to provide your tech stack and architecture choices. The constitution must be finalized before this step.
 
 ```bash
 /speckit.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
 ```
 
-### 5. Break down into tasks
+### 5. Generate tasks and implement (Stage 4: Tasks)
 
-Use **`/speckit.tasks`** to create an actionable task list from your implementation plan.
+Use **`/speckit.tasks`** to create an actionable task list, then **`/speckit.implement`** to execute:
 
 ```bash
 /speckit.tasks
-```
-
-### 6. Execute implementation
-
-Use **`/speckit.implement`** to execute all tasks and build your feature according to the plan.
-
-```bash
 /speckit.implement
 ```
 
-For detailed step-by-step instructions, see our [comprehensive guide](./spec-driven.md).
+Optionally, create issue tracker tickets with **`/speckit.taskstoissues`** before implementing:
+
+```bash
+/speckit.taskstoissues --jira PROJ
+```
+
+For detailed step-by-step instructions, see the [detailed process](#-detailed-process) below or the [comprehensive methodology](./spec-driven.md).
 
 ## 📽️ Video Overview
 
@@ -265,7 +283,7 @@ Commands for managing multi-feature projects:
 | Command                  | Description                                                              |
 | ------------------------ | ------------------------------------------------------------------------ |
 | `/speckit.project`       | Create or manage a project definition for multi-feature projects         |
-| `/speckit.taskstoissues` | Convert tasks to GitHub issues or Jira tickets                           |
+| `/speckit.taskstoissues` | Convert tasks to GitHub issues or Jira tickets with complexity scoring   |
 
 #### Optional Commands
 
@@ -353,7 +371,7 @@ If you encounter issues with an agent, please open an issue so we can refine the
 ## 📖 Learn More
 
 - **[Complete Spec-Driven Development Methodology](./spec-driven.md)** - Deep dive into the full process
-- **[Detailed Walkthrough](#-detailed-process)** - Step-by-step implementation guide
+- **[Detailed Walkthrough](#-detailed-process)** - Step-by-step implementation guide with mid-flight change guidance
 
 ---
 
@@ -410,7 +428,13 @@ The CLI will check if you have Claude Code, Gemini CLI, Cursor CLI, Qwen CLI, op
 specify init <project_name> --ai claude --ignore-agent-tools
 ```
 
-### **STEP 1:** Establish project principles
+### Stage 1: Specification (Product)
+
+#### Set up your agent file
+
+Your agent file (e.g., `CLAUDE.md` for Claude Code) should contain your **product-level architecture** and universal engineering truths. This is auto-generated from plan.md files but includes a `Product Architecture` section at the top that you maintain manually.
+
+#### Establish project principles (`/speckit.constitution`)
 
 Go to the project folder and run your AI agent. In our example, we're using `claude`.
 
@@ -418,17 +442,17 @@ Go to the project folder and run your AI agent. In our example, we're using `cla
 
 You will know that things are configured correctly if you see the `/speckit.constitution`, `/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, and `/speckit.implement` commands available.
 
-The first step should be establishing your project's governing principles using the `/speckit.constitution` command. This helps ensure consistent decision-making throughout all subsequent development phases:
+Establish your project's governing principles using the `/speckit.constitution` command. The constitution defines **how** you build this initiative - guiding principles for a specific project or epic set:
 
 ```text
 /speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
 ```
 
-This step creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines that the AI agent will reference during specification, planning, and implementation phases.
+This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines that the AI agent will reference during specification, planning, and implementation phases.
 
-### **STEP 2:** Create project specifications
+#### Create project specifications (`/speckit.specify`)
 
-With your project principles established, you can now create the functional specifications. Use the `/speckit.specify` command and then provide the concrete requirements for the project you want to develop.
+With your project principles established, you can now create the functional specifications. Use the `/speckit.specify` command and provide the concrete requirements for the project you want to develop.
 
 > [!IMPORTANT]
 > Be as explicit as possible about *what* you are trying to build and *why*. **Do not focus on the tech stack at this point**.
@@ -481,7 +505,9 @@ At this stage, your project folder contents should resemble the following:
         └── tasks-template.md
 ```
 
-### **STEP 3:** Functional specification clarification (required before planning)
+### Stage 2: Review (Product/Engineering/QA)
+
+#### Clarify and refine (`/speckit.clarify`)
 
 With the baseline specification created, you can go ahead and clarify any of the requirements that were not captured properly within the first shot attempt.
 
@@ -502,6 +528,8 @@ tasks for each one randomly distributed into different states of completion. Mak
 one task in each stage of completion.
 ```
 
+#### Validate the checklist
+
 You should also ask Claude Code to validate the **Review & Acceptance Checklist**, checking off the things that are validated/pass the requirements, and leave the ones that are not unchecked. The following prompt can be used:
 
 ```text
@@ -510,9 +538,14 @@ Read the review and acceptance checklist, and check off each item in the checkli
 
 It's important to use the interaction with Claude Code as an opportunity to clarify and ask questions around the specification - **do not treat its first attempt as final**.
 
-### **STEP 4:** Generate a plan
+### Stage 3: Planning (Engineering)
 
-You can now be specific about the tech stack and other technical requirements. You can use the `/speckit.plan` command that is built into the project template with a prompt like this:
+> [!NOTE]
+> The constitution must be finalized before this stage. If you drafted it in Stage 1, review and sign off on it now.
+
+#### Generate a plan (`/speckit.plan`)
+
+You can now be specific about the tech stack and other technical requirements. Use the `/speckit.plan` command with a prompt like this:
 
 ```text
 We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use
@@ -577,7 +610,7 @@ That's way too untargeted research. The research needs to help you solve a speci
 > [!NOTE]
 > Claude Code might be over-eager and add components that you did not ask for. Ask it to clarify the rationale and the source of the change.
 
-### **STEP 5:** Have Claude Code validate the plan
+#### Validate the plan
 
 With the plan in place, you should have Claude Code run through it to make sure that there are no missing pieces. You can use a prompt like this:
 
@@ -596,7 +629,9 @@ You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.c
 > [!NOTE]
 > Before you have the agent implement it, it's also worth prompting Claude Code to cross-check the details to see if there are any over-engineered pieces (remember - it can be over-eager). If over-engineered components or decisions exist, you can ask Claude Code to resolve them. Ensure that Claude Code follows the [constitution](base/memory/constitution.md) as the foundational piece that it must adhere to when establishing the plan.
 
-### **STEP 6:** Generate task breakdown with /speckit.tasks
+### Stage 4: Tasks (Engineering)
+
+#### Generate task breakdown (`/speckit.tasks`)
 
 With the implementation plan validated, you can now break down the plan into specific, actionable tasks that can be executed in the correct order. Use the `/speckit.tasks` command to automatically generate a detailed task breakdown from your implementation plan:
 
@@ -633,7 +668,7 @@ tasks:
   format: per-story  # or "single" (default)
 ```
 
-### **STEP 6b (Optional):** Create issue tickets with /speckit.taskstoissues
+#### Create issue tickets (`/speckit.taskstoissues`)
 
 After generating tasks, you can automatically create GitHub issues or Jira tickets:
 
@@ -645,9 +680,9 @@ After generating tasks, you can automatically create GitHub issues or Jira ticke
 /speckit.taskstoissues --jira PROJ
 ```
 
-This will create tickets for each task and update the task files with actual ticket keys.
+This will create tickets for each task and update the task files with actual ticket keys. Jira Story tickets include Fibonacci-based story point estimates in the standard Story Points field. Each story is created as a demo-able vertical slice linking to spec.md for acceptance criteria.
 
-### **STEP 7:** Implementation
+#### Implementation (`/speckit.implement`)
 
 Once ready, use the `/speckit.implement` command to execute your implementation plan:
 
@@ -667,6 +702,62 @@ The `/speckit.implement` command will:
 > The AI agent will execute local CLI commands (such as `dotnet`, `npm`, etc.) - make sure you have the required tools installed on your machine.
 
 Once the implementation is complete, test the application and resolve any runtime errors that may not be visible in CLI logs (e.g., browser console errors). You can copy and paste such errors back to your AI agent for resolution.
+
+### Managing Changes Mid-Flight
+
+Requirements change. Here's how to handle changes gracefully without losing momentum or accumulating drift.
+
+#### When to amend vs restart
+
+| Situation | Action | Example |
+|-----------|--------|---------|
+| Minor clarification | Amend the spec | "Add email validation to registration" |
+| New edge case discovered | Amend the spec + re-run `/speckit.clarify` | "Handle concurrent edits on same task" |
+| Tech stack change | Amend plan.md + regenerate tasks | "Switch from REST to GraphQL" |
+| Fundamental scope change | Re-run from `/speckit.specify` | "Pivot from Kanban to calendar view" |
+| Implementation drift | Restart from upstream artifact | See 3-4 iteration rule below |
+
+#### The 3-4 iteration rule
+
+If you've iterated more than 3-4 times on small fixes at the implementation level without resolving the issue, **stop patching and restart from the upstream artifact** (plan.md or spec.md). Continued patching compounds drift between what was specified and what gets built.
+
+Signs you need to restart from upstream:
+- Fixes keep introducing new issues
+- The implementation no longer resembles the plan
+- You're working around the architecture rather than with it
+- Test failures cascade across unrelated stories
+
+#### Impact matrix
+
+| What Changed | Update plan.md? | Regenerate tasks? | Notify team? |
+|--------------|-----------------|-------------------|--------------|
+| Acceptance criteria wording | No | No | Optional |
+| New functional requirement | Yes - add to plan | Yes | Yes |
+| Removed requirement | Yes - remove from plan | Yes | Yes |
+| New user story | Yes | Yes | Yes |
+| Non-functional requirement | Yes | Maybe | Yes |
+| Clarification (no scope change) | No | No | Optional |
+| Tech stack decision | Yes | Yes | Yes |
+| Data model change | Yes | Yes | Yes |
+
+#### Artifact stability
+
+| Artifact | Stability | Implication for Changes |
+|----------|-----------|------------------------|
+| constitution.md | Very Stable | Rarely needs changing; if it does, assess all downstream impact |
+| spec.md | Stable | Changes require review; bump version and notify team |
+| plan.md | Moderate | May evolve as technical decisions change; regenerate tasks after |
+| tasks.md | Volatile | Regenerate from plan changes; don't edit directly |
+
+#### Using the changelog
+
+The Changelog section in spec.md serves as a communication tool:
+
+| Version | When to bump | What it signals |
+|---------|-------------|-----------------|
+| 1.0 → 1.1 | Clarification or minor addition | "Check what changed, but your work is probably fine" |
+| 1.1 → 1.2 | New requirement or edge case | "Review the change - your story may be affected" |
+| 1.x → 2.0 | Major scope change | "Stop and re-plan - significant changes ahead" |
 
 </details>
 

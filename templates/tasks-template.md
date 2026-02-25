@@ -25,6 +25,18 @@ description: "Task list template for feature implementation"
 
 > **Note**: Jira keys are placeholders. Run `/speckit.taskstoissues` to create tickets and update this file with actual keys.
 
+## Complexity Estimate
+
+| Story | Points | Rationale |
+|-------|--------|-----------|
+| US1 - [Title] | [N] | [Key factor] |
+| US2 - [Title] | [N] | [Key factor] |
+| US3 - [Title] | [N] | [Key factor] |
+| **Total** | **[Sum]** | |
+
+> **Calibration**: 8 points ≈ 5 days traditional engineering (pre-AI). Scale: 1, 2, 3, 5, 8, 13, 20.
+> If total exceeds ~20 points, consider breaking the feature into smaller specs via `--project` mode.
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)

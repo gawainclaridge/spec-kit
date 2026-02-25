@@ -14,6 +14,7 @@
 
 **Epic**: [JIRA-EPIC-KEY] - [Feature Name]
 **Story Ticket**: [JIRA-STORY-KEY] - [Story Title]
+**Estimated Complexity**: [N] points
 
 ### Linked Jira Tasks
 
@@ -30,9 +31,9 @@
 
 **Independent Test Criteria**: [How to verify this story works standalone]
 
-**Acceptance Criteria** (from spec):
-1. **Given** [condition], **When** [action], **Then** [result]
-2. **Given** [condition], **When** [action], **Then** [result]
+**Acceptance Criteria**: See [spec.md](../spec.md#user-story-[N])
+
+**Demo Criteria**: [What can be demonstrated when this story is complete - 1-2 sentences]
 
 ---
 
