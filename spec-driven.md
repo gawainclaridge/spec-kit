@@ -72,7 +72,7 @@ The key is treating specifications as the source of truth, with code as the gene
 
 ## The 4-Stage Workflow
 
-Spec Kit aligns with a structured 4-stage workflow that supports team collaboration:
+Unifyr Spec Kit aligns with a structured 4-stage workflow that supports team collaboration:
 
 ```text
 Stage 1 - Specification (Product)
@@ -340,7 +340,7 @@ The commands embody SDD principles by treating specifications as executable arti
 
 ### Branch Strategies
 
-Spec Kit supports two branch strategies:
+Unifyr Spec Kit supports two branch strategies:
 
 **Single-spec branches (default):**
 ```text

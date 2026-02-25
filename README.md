@@ -1,6 +1,6 @@
 <div align="center">
-    <img src="./media/logo_large.webp" alt="Spec Kit Logo" width="200" height="200"/>
-    <h1>🌱 Spec Kit</h1>
+    <img src="./media/logo_large.webp" alt="Unifyr Spec Kit Logo" width="200" height="200"/>
+    <h1>🌱 Unifyr Spec Kit</h1>
     <h3><em>Build high-quality software faster.</em></h3>
 </div>
 
@@ -9,19 +9,35 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/github/spec-kit/actions/workflows/release.yml"><img src="https://github.com/github/spec-kit/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
-    <a href="https://github.com/github/spec-kit/stargazers"><img src="https://img.shields.io/github/stars/github/spec-kit?style=social" alt="GitHub stars"/></a>
-    <a href="https://github.com/github/spec-kit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/github/spec-kit" alt="License"/></a>
-    <a href="https://github.github.io/spec-kit/"><img src="https://img.shields.io/badge/docs-GitHub_Pages-blue" alt="Documentation"/></a>
+    <a href="https://github.com/gawainclaridge/spec-kit/actions/workflows/release.yml"><img src="https://github.com/gawainclaridge/spec-kit/actions/workflows/release.yml/badge.svg" alt="Release"/></a>
+    <a href="https://github.com/gawainclaridge/spec-kit/stargazers"><img src="https://img.shields.io/github/stars/gawainclaridge/spec-kit?style=social" alt="GitHub stars"/></a>
+    <a href="https://github.com/gawainclaridge/spec-kit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gawainclaridge/spec-kit" alt="License"/></a>
+    <a href="https://gawainclaridge.github.io/spec-kit/"><img src="https://img.shields.io/badge/docs-GitHub_Pages-blue" alt="Documentation"/></a>
 </p>
 
 ---
+
+> **Fork Notice:** Unifyr Spec Kit is a fork of [GitHub's Spec Kit](https://github.com/github/spec-kit), tailored to Unifyr's agile scrum processes. Key changes from vanilla Spec Kit:
+>
+> | Change | What it adds | Why it matters for Unifyr |
+> |--------|-------------|--------------------------|
+> | **4-stage process** | Specification → Review → Planning → Tasks with explicit team ownership (Product, Engineering, QA) | Maps directly to our sprint ceremonies and handoff points |
+> | **Multi-feature projects** | `/speckit.project` command and `--project` flag group related specs under a shared project context | Supports epic-level planning where multiple features share constraints, users, and scope boundaries |
+> | **Constitution enforcement** | Constitution is a hard prerequisite for `/speckit.plan` | Ensures engineering principles are agreed before any planning begins, reducing rework |
+> | **Jira integration** | `--jira` flag on `/speckit.taskstoissues` creates Epic → Story → Sub-task hierarchy with Fibonacci story points | Tickets flow straight into our Jira boards with correct hierarchy and sizing |
+> | **Per-story task files** | `--per-story` flag on `/speckit.tasks` generates separate task files per user story | Enables parallel story assignment across team members in a sprint |
+> | **Complexity scoring** | Fibonacci-based story point estimates with calibration (8 pts ≈ 5 days) and split advisory at 20+ pts | Right-sizes features before sprint commitment; flags over-scoped work early |
+> | **Mid-flight change guidance** | Amend-vs-restart decision framework, 3-4 iteration rule, impact matrix | Gives the team a shared playbook for handling scope changes without accumulating drift |
+> | **Artifact stability framework** | constitution (very stable) → spec (stable) → plan (moderate) → tasks (volatile) | Everyone knows which artifacts are safe to change and which require re-approval |
+> | **Sign-off tracking** | Advisory sign-off tables in spec, plan, and constitution | Makes approval status visible across Product, Engineering, and QA |
+> | **Demo-able vertical slices** | Stories must be independently testable and demonstrable to QA/Product | Aligns with our sprint review format where every story is demoed |
+>
+> Upstream contributions are welcomed back. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Table of Contents
 
 - [🤔 What is Spec-Driven Development?](#-what-is-spec-driven-development)
 - [⚡ Get Started](#-get-started)
-- [📽️ Video Overview](#️-video-overview)
 - [🤖 Supported AI Agents](#-supported-ai-agents)
 - [🔧 Specify CLI Reference](#-specify-cli-reference)
 - [📚 Core Philosophy](#-core-philosophy)
@@ -51,7 +67,7 @@ Choose your preferred installation method:
 Install once and use everywhere:
 
 ```bash
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --from git+https://github.com/gawainclaridge/spec-kit.git@unifyr-spec-kit
 ```
 
 Then use the tool directly:
@@ -72,7 +88,7 @@ specify check
 To upgrade Specify, see the [Upgrade Guide](./docs/upgrade.md) for detailed instructions. Quick upgrade:
 
 ```bash
-uv tool install specify-cli --force --from git+https://github.com/github/spec-kit.git
+uv tool install specify-cli --force --from git+https://github.com/gawainclaridge/spec-kit.git@unifyr-spec-kit
 ```
 
 #### Option 2: One-time Usage
@@ -80,7 +96,7 @@ uv tool install specify-cli --force --from git+https://github.com/github/spec-ki
 Run directly without installing:
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
+uvx --from git+https://github.com/gawainclaridge/spec-kit.git@unifyr-spec-kit specify init <PROJECT_NAME>
 ```
 
 **Benefits of persistent installation:**
@@ -92,7 +108,7 @@ uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME
 
 ### The 4-Stage Process
 
-Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
+Unifyr Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
 
 | Stage | Focus | Key Commands |
 |-------|-------|-------------|
@@ -105,10 +121,12 @@ Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
 
 Launch your AI assistant in the project directory. The `/speckit.*` commands are available in the assistant.
 
-Set up your **agent file** (e.g., `CLAUDE.md`) with your product-level architecture and universal engineering truths. Then use **`/speckit.constitution`** to define how you'll build this initiative:
+Set up your **agent file** (e.g., `CLAUDE.md`) with your product-level architecture and universal engineering truths.
+
+For multi-feature projects, use **`/speckit.project`** first to create shared context across features:
 
 ```bash
-/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
+/speckit.project my-project-name
 ```
 
 Use **`/speckit.specify`** to describe what you want to build. Focus on the **what** and **why**, not the tech stack:
@@ -117,7 +135,11 @@ Use **`/speckit.specify`** to describe what you want to build. Focus on the **wh
 /speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
 ```
 
-For multi-feature projects, use **`/speckit.project`** first to create shared context across features.
+Optionally, use **`/speckit.constitution`** to draft guiding principles for this initiative. The constitution is optional at this stage but must be finalized before Stage 3 (Planning):
+
+```bash
+/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
+```
 
 ### 3. Review and refine (Stage 2: Review)
 
@@ -137,26 +159,25 @@ Use the **`/speckit.plan`** command to provide your tech stack and architecture 
 
 ### 5. Generate tasks and implement (Stage 4: Tasks)
 
-Use **`/speckit.tasks`** to create an actionable task list, then **`/speckit.implement`** to execute:
+Use **`/speckit.tasks`** to create an actionable task list:
 
 ```bash
 /speckit.tasks
-/speckit.implement
 ```
 
-Optionally, create issue tracker tickets with **`/speckit.taskstoissues`** before implementing:
+Optionally, create issue tracker tickets with **`/speckit.taskstoissues`**:
 
 ```bash
 /speckit.taskstoissues --jira PROJ
 ```
 
+Then use **`/speckit.implement`** to execute the plan:
+
+```bash
+/speckit.implement
+```
+
 For detailed step-by-step instructions, see the [detailed process](#-detailed-process) below or the [comprehensive methodology](./spec-driven.md).
-
-## 📽️ Video Overview
-
-Want to see Spec Kit in action? Watch our [video overview](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)!
-
-[![Spec Kit video header](/media/spec-kit-video-header.jpg)](https://www.youtube.com/watch?v=a9eR1xsfvHg&pp=0gcJCckJAYcqIYzv)
 
 ## 🤖 Supported AI Agents
 
@@ -434,7 +455,7 @@ specify init <project_name> --ai claude --ignore-agent-tools
 
 Your agent file (e.g., `CLAUDE.md` for Claude Code) should contain your **product-level architecture** and universal engineering truths. This is auto-generated from plan.md files but includes a `Product Architecture` section at the top that you maintain manually.
 
-#### Establish project principles (`/speckit.constitution`)
+#### Launch your AI agent
 
 Go to the project folder and run your AI agent. In our example, we're using `claude`.
 
@@ -442,17 +463,19 @@ Go to the project folder and run your AI agent. In our example, we're using `cla
 
 You will know that things are configured correctly if you see the `/speckit.constitution`, `/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, and `/speckit.implement` commands available.
 
-Establish your project's governing principles using the `/speckit.constitution` command. The constitution defines **how** you build this initiative - guiding principles for a specific project or epic set:
+#### Create shared project context (`/speckit.project`) — optional
+
+For multi-feature projects, use `/speckit.project` first to create shared context across features:
 
 ```text
-/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
+/speckit.project taskify
 ```
 
-This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines that the AI agent will reference during specification, planning, and implementation phases.
+This creates a `project.md` with out-of-scope items, shared constraints, and a features table that all specs in the project can reference.
 
 #### Create project specifications (`/speckit.specify`)
 
-With your project principles established, you can now create the functional specifications. Use the `/speckit.specify` command and provide the concrete requirements for the project you want to develop.
+Use the `/speckit.specify` command and provide the concrete requirements for the project you want to develop.
 
 > [!IMPORTANT]
 > Be as explicit as possible about *what* you are trying to build and *why*. **Do not focus on the tech stack at this point**.
@@ -483,6 +506,16 @@ After this prompt is entered, you should see Claude Code kick off the planning a
 Once this step is completed, you should have a new branch created (e.g., `001-create-taskify`), as well as a new specification in the `specs/001-create-taskify` directory.
 
 The produced specification should contain a set of user stories and functional requirements, as defined in the template.
+
+#### Draft project principles (`/speckit.constitution`) — optional
+
+Optionally, draft your project's governing principles using the `/speckit.constitution` command. The constitution defines **how** you build this initiative - guiding principles for a specific project or epic set:
+
+```text
+/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
+```
+
+This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines. The constitution is optional at this stage but **must be finalized before** Stage 3 (Planning).
 
 At this stage, your project folder contents should resemble the following:
 
@@ -789,7 +822,7 @@ rm gcm-linux_amd64.2.6.1.deb
 
 ## 💬 Support
 
-For support, please open a [GitHub issue](https://github.com/github/spec-kit/issues/new). We welcome bug reports, feature requests, and questions about using Spec-Driven Development.
+For support, please open a [GitHub issue](https://github.com/gawainclaridge/spec-kit/issues/new). We welcome bug reports, feature requests, and questions about using Spec-Driven Development.
 
 ## 🙏 Acknowledgements
 
