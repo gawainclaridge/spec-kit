@@ -52,6 +52,20 @@
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+*The constitution actively drives this plan's decisions — not just compliance gates.*
+
+### Decisions That Shaped This Plan
+
+<!-- List architectural decisions and implementation principles from the constitution
+     that actively influenced technology choices, architecture, testing strategy, and
+     migration approach in this plan. Show how each decision mapped to a plan choice. -->
+
+| Constitution Decision | How It Shaped This Plan |
+|-----------------------|------------------------|
+| [e.g., "TDD mandatory"] | [e.g., "Test scenarios designed before implementation tasks"] |
+| [e.g., "Library-First architecture"] | [e.g., "Project structure uses standalone library modules"] |
+
+### Compliance Gates
 
 [Gates determined based on constitution file]
 
@@ -116,6 +130,17 @@ ios/ or android/
 **Structure Decision**: [Document the selected structure and reference the real
 directories captured above]
 
+## Migration Plan
+
+<!--
+  Required if any breaking changes or schema migrations are introduced.
+  Populated during Phase 1 of /speckit.plan.
+  Leave empty if no breaking changes or migrations are needed.
+-->
+
+| Change | Affected Consumers | Strategy | Rollback Plan |
+|--------|--------------------|----------|---------------|
+
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
@@ -129,7 +154,7 @@ directories captured above]
 
 <!--
   Define testing scenarios for each unit of work.
-  QA should review and extend these during Stage 3 (Planning).
+  QA should review and extend these during Stage 4 (Planning).
   These scenarios inform the task breakdown in /speckit.tasks.
 -->
 

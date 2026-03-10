@@ -5,10 +5,10 @@ handoffs:
     agent: speckit.clarify
     prompt: Review and clarify the specification
     send: true
-  - label: Create Constitution
+  - label: Create Constitution (Stage 3)
     agent: speckit.constitution
     prompt: Create project constitution with principles for...
-  - label: Build Technical Plan (Stage 3)
+  - label: Build Technical Plan (Stage 4)
     agent: speckit.plan
     prompt: Create a plan for the spec. I am building with...
 scripts:

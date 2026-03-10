@@ -70,15 +70,14 @@ Today, practicing SDD requires assembling existing tools and maintaining discipl
 
 The key is treating specifications as the source of truth, with code as the generated output that serves the specification rather than the other way around.
 
-## The 4-Stage Workflow
+## The 5-Stage Workflow
 
-Unifyr Spec Kit aligns with a structured 4-stage workflow that supports team collaboration:
+Unifyr Spec Kit aligns with a structured 5-stage workflow that supports team collaboration:
 
 ```text
 Stage 1 - Specification (Product)
 ├── /speckit.project     → Creates project.md for multi-feature projects (optional)
-├── /speckit.specify     → Creates draft spec.md
-└── /speckit.constitution → Creates draft constitution.md (optional at this stage)
+└── /speckit.specify     → Creates draft spec.md
 
 Stage 2 - Review (Product/Engineering/QA)
 ├── /speckit.clarify     → Analyzes spec for gaps
@@ -86,12 +85,16 @@ Stage 2 - Review (Product/Engineering/QA)
 ├── Add acceptance criteria, edge cases
 └── Sign off spec (advisory)
 
-Stage 3 - Planning (Engineering)
-├── /speckit.constitution → Finalize and sign off constitution (required)
+Stage 3 - Constitution (Engineering)
+├── /speckit.constitution → Scans codebase, runs interactive Q&A
+├── Establishes architectural decisions & implementation principles that drive plan & implement
+└── Sign off constitution (required before planning)
+
+Stage 4 - Planning (Engineering)
 ├── /speckit.plan        → Creates plan.md (requires constitution finalized)
 └── Testing scenarios defined
 
-Stage 4 - Tasks (Engineering)
+Stage 5 - Tasks (Engineering)
 ├── /speckit.tasks       → Creates tasks.md (or per-story files)
 ├── /speckit.taskstoissues → Link to Jira/GitHub tickets
 └── /speckit.implement   → Execute tasks
@@ -217,7 +220,7 @@ Here's how these commands transform the traditional development workflow:
 Total: ~12 hours of documentation work
 ```
 
-**SDD with Commands Approach (4-Stage Process):**
+**SDD with Commands Approach (5-Stage Process):**
 
 ```bash
 # ============================================
@@ -238,9 +241,6 @@ Total: ~12 hours of documentation work
 # - Generates specs/003-chat-system/spec.md with Non-Goals, Sign-Off, Changelog
 # - Populates it with structured requirements
 
-# Optionally create a draft constitution (if not already done)
-/speckit.constitution
-
 # ============================================
 # STAGE 2 - Review (Product/Engineering/QA)
 # ============================================
@@ -252,24 +252,32 @@ Total: ~12 hours of documentation work
 # Sign off spec (advisory)
 
 # ============================================
-# STAGE 3 - Planning (Engineering)
+# STAGE 3 - Constitution (Engineering)
 # ============================================
 
-# Finalize constitution (required before planning)
+# Create/finalize constitution with interactive Q&A
+# Scans codebase for technical signals, asks targeted questions
 /speckit.constitution
+
+# Or provide principles directly:
+/speckit.constitution TDD mandatory, microservices architecture, all APIs versioned
+
+# ============================================
+# STAGE 4 - Planning (Engineering)
+# ============================================
 
 # Generate implementation plan (5 minutes)
 /speckit.plan WebSocket for real-time messaging, PostgreSQL for history, Redis for presence
 
 # This automatically creates:
-# - specs/003-chat-system/plan.md (with Testing Scenarios, Sign-Off)
+# - specs/003-chat-system/plan.md (with Testing Scenarios, Migration Plan, Sign-Off)
 # - specs/003-chat-system/research.md (WebSocket library comparisons)
 # - specs/003-chat-system/data-model.md (Message and User schemas)
 # - specs/003-chat-system/contracts/ (WebSocket events, REST endpoints)
 # - specs/003-chat-system/quickstart.md (Key validation scenarios)
 
 # ============================================
-# STAGE 4 - Tasks (Engineering)
+# STAGE 5 - Tasks (Engineering)
 # ============================================
 
 # Generate executable tasks (5 minutes)
@@ -285,12 +293,13 @@ Total: ~12 hours of documentation work
 /speckit.implement
 ```
 
-Following the 4-stage process, you have:
+Following the 5-stage process, you have:
 
 - **Stage 1**: A complete feature specification with user stories, non-goals, and acceptance criteria
 - **Stage 2**: Clarified requirements with team review and sign-off
-- **Stage 3**: A detailed implementation plan with technology choices, testing scenarios, and finalized constitution
-- **Stage 4**: Executable tasks, Jira tickets, and implemented code
+- **Stage 3**: A finalized constitution with engineering principles and governance
+- **Stage 4**: A detailed implementation plan with technology choices, testing scenarios, and migration plans
+- **Stage 5**: Executable tasks, Jira tickets, and implemented code
 - All documents properly versioned in a feature branch
 
 ### Example: Multi-Feature Project

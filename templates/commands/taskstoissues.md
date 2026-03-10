@@ -16,7 +16,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ### Workflow Context (Unifyr Process)
 
-This is **Stage 4 (Tasks)** - Issue Creation phase:
+This is **Stage 5 (Tasks)** - Issue Creation phase:
 - **Team**: Engineering only
 - **Prerequisites**: tasks.md MUST exist
 - **Output**: GitHub issues or Jira tickets (Epic → Story → Sub-task)

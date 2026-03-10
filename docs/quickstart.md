@@ -3,21 +3,22 @@
 This guide will help you get started with Spec-Driven Development using Unifyr Spec Kit.
 
 > [!NOTE]
-> **Fork of Spec Kit** — Unifyr Spec Kit is a fork of [GitHub's Spec Kit](https://github.com/github/spec-kit), tailored to Unifyr's agile scrum processes. Key additions include a 4-stage process with team ownership, multi-feature project support, Jira integration with Fibonacci story points, per-story task files for parallel sprint work, constitution enforcement before planning, and mid-flight change guidance. See the [README](../README.md) for a full comparison table.
+> **Fork of Spec Kit** — Unifyr Spec Kit is a fork of [GitHub's Spec Kit](https://github.com/github/spec-kit), tailored to Unifyr's agile scrum processes. Key additions include a 5-stage process with team ownership, multi-feature project support, Jira integration with Fibonacci story points, per-story task files for parallel sprint work, interactive constitution Q&A before planning, and mid-flight change guidance. See the [README](../README.md) for a full comparison table.
 
 > [!NOTE]
 > All automation scripts now provide both Bash (`.sh`) and PowerShell (`.ps1`) variants. The `specify` CLI auto-selects based on OS unless you pass `--script sh|ps`.
 
-## The 4-Stage Process
+## The 5-Stage Process
 
-Unifyr Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
+Unifyr Spec Kit follows a structured 5-stage workflow aligned with team collaboration:
 
 | Stage | Focus | Key Activities |
 |-------|-------|----------------|
-| **Stage 1: Specification** | Product | Create project.md (optional for multi-feature), draft spec.md, optionally draft constitution.md |
+| **Stage 1: Specification** | Product | Create project.md (optional for multi-feature), draft spec.md |
 | **Stage 2: Review** | Product/Engineering/QA | `/speckit.clarify`, review spec, add acceptance criteria, sign off |
-| **Stage 3: Planning** | Engineering | Finalize constitution, create plan.md, define testing scenarios |
-| **Stage 4: Tasks** | Engineering | Generate tasks.md, link to issue tracker, implement |
+| **Stage 3: Constitution** | Engineering | `/speckit.constitution` — establish high-level architectural decisions that guide planning and implementation |
+| **Stage 4: Planning** | Engineering | Create plan.md, define testing scenarios, migration plans |
+| **Stage 5: Tasks** | Engineering | Generate tasks.md, link to issue tracker, implement |
 
 > [!TIP]
 > **Context Awareness**: Unifyr Spec Kit commands automatically detect the active feature based on your current Git branch (e.g., `001-feature-name`). For single-feature workflows, switch Git branches to switch between specifications. For multi-feature projects using `/speckit.project`, multiple specs live on the same project branch (e.g., `project-taskify`) and are managed through the project directory structure.
@@ -58,12 +59,12 @@ Think of it as the product's architectural identity:
 | File | Owner | About | Scope |
 |------|-------|-------|-------|
 | **Agent file** (CLAUDE.md etc.) | Engineering | Universal product truths | Entire product/repo |
-| **Constitution** | Engineering | **The HOW** - principles for this initiative | Project/epic set |
-| **Project.md** | Product | **The WHAT** - shared feature context | Multi-feature project |
+| **Constitution** | Engineering | **Architectural decisions & implementation principles** that drive plan & implement | Project/epic set |
+| **Project.md** | Product | **Universal constraints** that bound specifications | Multi-feature project |
 
-- **Agent file**: High-level product architecture, universal engineering truths. Rarely changes. Engineering-maintained.
-- **Constitution**: Initiative-specific principles, quality gates, development approach. Guides Stage 3 planning. Engineering-managed.
-- **Project.md**: Feature list, shared constraints, out-of-scope items, Jira Epic. Product-managed.
+- **Agent file**: Universal product architecture and engineering truths that rarely change. The permanent product identity. Engineering-maintained.
+- **Constitution**: Initiative-specific architectural decisions AND overarching implementation principles that go beyond the agent file. Created in Stage 3, actively drives Stage 4 (Planning) and Stage 5 (Implementation). Engineering-managed.
+- **Project.md**: Out-of-scope exclusions, shared constraints, and feature list that bound what specifications can include. Product-managed.
 
 ### Step 2: Create Specifications (Stage 1: Specification)
 
@@ -81,7 +82,23 @@ Use **`/speckit.specify`** to describe what you want to build. Focus on the **wh
 /speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
 ```
 
-Optionally, use **`/speckit.constitution`** to draft guiding principles for this initiative. The constitution is optional at this stage but must be finalized before Stage 3 (Planning):
+### Step 3: Review and Refine (Stage 2: Review)
+
+Use **`/speckit.clarify`** to identify and resolve ambiguities in your specification. You can provide specific focus areas as arguments:
+
+```bash
+/speckit.clarify Focus on security and performance requirements.
+```
+
+### Step 4: Create Constitution (Stage 3: Constitution)
+
+Use **`/speckit.constitution`** to establish high-level architectural decisions for this initiative. The command scans your codebase for existing patterns and runs an interactive Q&A to fill gaps — producing the architectural foundation that `/speckit.plan` and `/speckit.implement` use as guardrails:
+
+```markdown
+/speckit.constitution
+```
+
+Or provide principles directly:
 
 ```markdown
 /speckit.constitution This project follows a "Library-First" approach. All features must be implemented as standalone libraries first. We use TDD strictly. We prefer functional programming patterns.
@@ -91,21 +108,13 @@ Optionally, use **`/speckit.constitution`** to draft guiding principles for this
 
 - Expect to invest 2-3 days of senior engineering time on the constitution
 - Clean up existing repo documentation first (README, architecture notes) before drafting
-- Document YOUR architecture decisions, not generic best practices
-- Start with 5-7 focused principles that you actually enforce today
+- Document YOUR architectural decisions, not generic best practices — these directly constrain what `/speckit.plan` generates
+- Start with 5-7 focused decisions that you actually enforce today
 
 > [!NOTE]
-> The constitution is optional in Stage 1 but **must be finalized before** `/speckit.plan` (Stage 3). If you skip this step, `/speckit.specify` will warn you but continue.
+> The constitution **must be finalized before** `/speckit.plan` (Stage 4) — the plan reads the constitution to shape technology choices, phase gates, and testing strategy. If you skip this step, `/speckit.plan` will offer to create one inline.
 
-### Step 3: Review and Refine (Stage 2: Review)
-
-Use **`/speckit.clarify`** to identify and resolve ambiguities in your specification. You can provide specific focus areas as arguments:
-
-```bash
-/speckit.clarify Focus on security and performance requirements.
-```
-
-### Step 4: Create Implementation Plan (Stage 3: Planning)
+### Step 5: Create Implementation Plan (Stage 4: Planning)
 
 Use the **`/speckit.plan`** slash command to provide your tech stack and architecture choices. The constitution must be finalized before this step.
 
@@ -113,7 +122,7 @@ Use the **`/speckit.plan`** slash command to provide your tech stack and archite
 /speckit.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
 ```
 
-### Step 5: Generate Tasks and Implement (Stage 4: Tasks)
+### Step 6: Generate Tasks and Implement (Stage 5: Tasks)
 
 Use **`/speckit.tasks`** to create an actionable task list:
 
@@ -147,7 +156,7 @@ Then, use the **`/speckit.implement`** slash command to execute the plan:
 
 ## Detailed Example: Building Taskify
 
-Here's a complete example of building a team productivity platform, following the 4-stage process:
+Here's a complete example of building a team productivity platform, following the 5-stage process:
 
 ### Stage 1: Specification
 
@@ -189,15 +198,23 @@ Validate the specification checklist using the `/speckit.checklist` command:
 /speckit.checklist
 ```
 
-### Stage 3: Planning
+### Stage 3: Constitution
 
-Finalize the constitution if you drafted it in Stage 1. Then generate a technical plan — be specific about your tech stack and requirements:
+Create and finalize the constitution with the interactive Q&A:
+
+```bash
+/speckit.constitution Taskify is a "Security-First" application. All user inputs must be validated. We use a microservices architecture. Code must be fully documented.
+```
+
+### Stage 4: Planning
+
+Generate a technical plan — be specific about your tech stack and requirements:
 
 ```bash
 /speckit.plan We are going to generate this using .NET Aspire, using Postgres as the database. The frontend should use Blazor server with drag-and-drop task boards, real-time updates. There should be a REST API created with a projects API, tasks API, and a notifications API.
 ```
 
-### Stage 4: Tasks
+### Stage 5: Tasks
 
 Generate a task breakdown:
 

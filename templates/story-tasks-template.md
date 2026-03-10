@@ -51,7 +51,9 @@
 
 <!--
   Tests from plan.md Testing Scenarios for this user story.
-  Write tests FIRST, ensure they FAIL before implementation.
+  Testing approach follows the constitution: If TDD, write tests FIRST and ensure
+  they FAIL before implementation. If test-alongside, write tests with each component.
+  Only omit tests if constitution or user explicitly says no tests.
 -->
 
 - [ ] T001 [P] Contract test: [scenario] in tests/contract/[file]

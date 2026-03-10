@@ -1,7 +1,10 @@
 ---
 description: Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec.
 handoffs:
-  - label: Build Technical Plan (Stage 3)
+  - label: Create Constitution (Stage 3)
+    agent: speckit.constitution
+    prompt: Create project constitution with principles for...
+  - label: Build Technical Plan (Stage 4)
     agent: speckit.plan
     prompt: Create a plan for the spec. I am building with...
 scripts:
@@ -24,7 +27,7 @@ This is **Stage 2 (Review)** of the Unifyr process:
 - **Purpose**: Analyze spec for gaps, add edge cases, clarify ambiguities
 - **Prerequisites**: Completed spec.md from Stage 1
 - **Output**: Clarified spec ready for planning
-- **Next step**: `/speckit.plan` (Stage 3 - Engineering)
+- **Next step**: `/speckit.constitution` (Stage 3 - Engineering) or `/speckit.plan` (Stage 4)
 
 ## Outline
 

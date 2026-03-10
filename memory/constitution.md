@@ -1,50 +1,69 @@
 # [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- The constitution captures high-level architectural decisions and overarching
+     implementation principles for this initiative. These directly drive how
+     /speckit.plan structures the implementation and how /speckit.implement executes it.
+     It goes beyond the agent file (universal product truths) to capture initiative-specific
+     engineering guidance. Focus on concrete, actionable decisions and principles
+     that constrain downstream technical choices — not abstract best practices. -->
 
-## Core Principles
+## Core Architectural Decisions
 
 ### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
+<!-- Example: I. Library-First Architecture -->
 [PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+<!-- Example: Every feature starts as a standalone library with CLI interface; Libraries must be self-contained, independently testable, documented; This decision shapes how /speckit.plan structures phases and module boundaries -->
 
 ### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
+<!-- Example: II. Text-Based Interfaces -->
 [PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats; This ensures observability and testability across all components -->
 
 ### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+<!-- Example: III. Test-First Development (NON-NEGOTIABLE) -->
 [PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced; /speckit.plan must order test tasks before implementation tasks -->
 
 ### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
+<!-- Example: IV. Integration-First Testing Strategy -->
 [PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+<!-- Example: Prefer real databases over mocks; Contract tests mandatory before implementation; Focus areas: library contracts, inter-service communication, shared schemas -->
 
 ### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+<!-- Example: V. Simplicity Constraints / VI. Versioning Strategy / VII. Observability -->
 [PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+<!-- Example: Maximum 3 projects for initial implementation; Or: MAJOR.MINOR.BUILD with semantic-release; Or: Structured logging required with OpenTelemetry tracing -->
 
 ## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+<!-- Example: Technical Constraints, Security Architecture, Migration Strategy, etc. -->
 
 [SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+<!-- Example: "All persistent storage uses PostgreSQL with Alembic migrations",
+     "Auth via OAuth2 with JWT tokens", "All user-facing strings externalised for AI translation",
+     "Breaking changes require migration plan with rollback strategy" -->
 
 ## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+<!-- Example: Development Workflow, Quality Gates, Deployment Architecture, etc. -->
 
 [SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+<!-- Example: "CI pipeline: lint → test → build → deploy to staging",
+     "All PRs require contract test pass before merge",
+     "Feature flags for all user-facing changes" -->
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+<!-- How these architectural decisions evolve. Constitution supersedes all other practices.
+     Amendments require documentation, approval, and downstream impact assessment. -->
 
 [GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+<!-- Example: All PRs/reviews must verify compliance with architectural decisions;
+     Complexity beyond these decisions must be justified in plan.md;
+     Use [GUIDANCE_FILE] for runtime development guidance -->
+
+<!--
+## Derivation Log (auto-generated by /speckit.constitution Q&A)
+Records how each architectural decision was derived. Do not edit manually.
+### Session YYYY-MM-DD
+- Category: [category] → Decision: [name] (Source: Detected/Q&A/User-authored)
+-->
 
 **Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
 <!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

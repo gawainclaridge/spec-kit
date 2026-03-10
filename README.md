@@ -21,9 +21,9 @@
 >
 > | Change | What it adds | Why it matters for Unifyr |
 > |--------|-------------|--------------------------|
-> | **4-stage process** | Specification → Review → Planning → Tasks with explicit team ownership (Product, Engineering, QA) | Maps directly to our sprint ceremonies and handoff points |
+> | **5-stage process** | Specification → Review → Constitution → Planning → Tasks with explicit team ownership (Product, Engineering, QA) | Maps directly to our sprint ceremonies and handoff points |
 > | **Multi-feature projects** | `/speckit.project` command and `--project` flag group related specs under a shared project context | Supports epic-level planning where multiple features share constraints, users, and scope boundaries |
-> | **Constitution enforcement** | Constitution is a hard prerequisite for `/speckit.plan` | Ensures engineering principles are agreed before any planning begins, reducing rework |
+> | **Constitution enforcement** | Constitution is a hard prerequisite for `/speckit.plan` | Ensures high-level architectural decisions are agreed before any planning begins, reducing rework |
 > | **Jira integration** | `--jira` flag on `/speckit.taskstoissues` creates Epic → Story → Sub-task hierarchy with Fibonacci story points | Tickets flow straight into our Jira boards with correct hierarchy and sizing |
 > | **Per-story task files** | `--per-story` flag on `/speckit.tasks` generates separate task files per user story | Enables parallel story assignment across team members in a sprint |
 > | **Complexity scoring** | Fibonacci-based story point estimates with calibration (8 pts ≈ 5 days) and split advisory at 20+ pts | Right-sizes features before sprint commitment; flags over-scoped work early |
@@ -106,16 +106,17 @@ uvx --from git+https://github.com/gawainclaridge/spec-kit.git@unifyr-spec-kit sp
 - Better tool management with `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
 - Cleaner shell configuration
 
-### The 4-Stage Process
+### The 5-Stage Process
 
-Unifyr Spec Kit follows a structured 4-stage workflow aligned with team collaboration:
+Unifyr Spec Kit follows a structured 5-stage workflow aligned with team collaboration:
 
 | Stage | Focus | Key Commands |
 |-------|-------|-------------|
-| **Stage 1: Specification** | Product | `/speckit.project`, `/speckit.specify`, `/speckit.constitution` |
+| **Stage 1: Specification** | Product | `/speckit.project`, `/speckit.specify` |
 | **Stage 2: Review** | Product/Engineering/QA | `/speckit.clarify` |
-| **Stage 3: Planning** | Engineering | `/speckit.plan` |
-| **Stage 4: Tasks** | Engineering | `/speckit.tasks`, `/speckit.taskstoissues`, `/speckit.implement` |
+| **Stage 3: Constitution** | Engineering | `/speckit.constitution` |
+| **Stage 4: Planning** | Engineering | `/speckit.plan` |
+| **Stage 5: Tasks** | Engineering | `/speckit.tasks`, `/speckit.taskstoissues`, `/speckit.implement` |
 
 ### 2. Create specifications (Stage 1: Specification)
 
@@ -135,12 +136,6 @@ Use **`/speckit.specify`** to describe what you want to build. Focus on the **wh
 /speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
 ```
 
-Optionally, use **`/speckit.constitution`** to draft guiding principles for this initiative. The constitution is optional at this stage but must be finalized before Stage 3 (Planning):
-
-```bash
-/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
-```
-
 ### 3. Review and refine (Stage 2: Review)
 
 Use **`/speckit.clarify`** to identify and resolve ambiguities in your specification before planning:
@@ -149,7 +144,23 @@ Use **`/speckit.clarify`** to identify and resolve ambiguities in your specifica
 /speckit.clarify Focus on security and performance requirements.
 ```
 
-### 4. Create implementation plan (Stage 3: Planning)
+### 4. Create constitution (Stage 3: Constitution)
+
+Use **`/speckit.constitution`** to establish high-level architectural decisions for this initiative. The command scans your codebase for technical signals, then runs an interactive Q&A to fill gaps across 10 architectural concern categories:
+
+```bash
+/speckit.constitution
+```
+
+Or seed it with known principles — the Q&A will confirm and fill gaps:
+
+```bash
+/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
+```
+
+The constitution captures **high-level architectural decisions** — the foundational technical direction that directly informs Stage 4 (Planning) and Stage 5 (Implementation). It must be finalized before planning can proceed. See [Stage 3 details](#stage-3-constitution-engineering) for the full workflow.
+
+### 5. Create implementation plan (Stage 4: Planning)
 
 Use the **`/speckit.plan`** command to provide your tech stack and architecture choices. The constitution must be finalized before this step.
 
@@ -157,7 +168,7 @@ Use the **`/speckit.plan`** command to provide your tech stack and architecture 
 /speckit.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
 ```
 
-### 5. Generate tasks and implement (Stage 4: Tasks)
+### 6. Generate tasks and implement (Stage 5: Tasks)
 
 Use **`/speckit.tasks`** to create an actionable task list:
 
@@ -291,7 +302,7 @@ Essential commands for the Spec-Driven Development workflow:
 
 | Command                 | Description                                                              |
 | ----------------------- | ------------------------------------------------------------------------ |
-| `/speckit.constitution` | Create or update project governing principles and development guidelines |
+| `/speckit.constitution` | Establish high-level architectural decisions and engineering principles that guide planning and implementation |
 | `/speckit.specify`      | Define what you want to build (requirements and user stories)            |
 | `/speckit.plan`         | Create technical implementation plans with your chosen tech stack        |
 | `/speckit.tasks`        | Generate actionable task lists for implementation                        |
@@ -509,13 +520,13 @@ The produced specification should contain a set of user stories and functional r
 
 #### Draft project principles (`/speckit.constitution`) — optional
 
-Optionally, draft your project's governing principles using the `/speckit.constitution` command. The constitution defines **how** you build this initiative - guiding principles for a specific project or epic set:
+Optionally, establish your project's high-level architectural decisions using the `/speckit.constitution` command. The constitution captures the architectural direction for a specific project or epic set — decisions that directly guide Stage 4 (Planning) and Stage 5 (Implementation):
 
 ```text
 /speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements. Include governance for how these principles should guide technical decisions and implementation choices.
 ```
 
-This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines. The constitution is optional at this stage but **must be finalized before** Stage 3 (Planning).
+This creates or updates the `.specify/memory/constitution.md` file with your project's foundational guidelines. The constitution is its own stage (Stage 3) and **must be finalized before** Stage 4 (Planning).
 
 At this stage, your project folder contents should resemble the following:
 
@@ -571,10 +582,78 @@ Read the review and acceptance checklist, and check off each item in the checkli
 
 It's important to use the interaction with Claude Code as an opportunity to clarify and ask questions around the specification - **do not treat its first attempt as final**.
 
-### Stage 3: Planning (Engineering)
+### Stage 3: Constitution (Engineering)
+
+The constitution captures your team's **high-level architectural decisions and overarching implementation principles** for this initiative — the foundational technical direction that directly informs how `/speckit.plan` structures the implementation and how `/speckit.implement` executes it. It sits between the specification (the **what**) and the plan (the **how, technically**), acting as the architectural DNA that ensures all downstream technical choices stay aligned. Where the agent file captures universal product truths that rarely change, the constitution captures initiative-specific engineering guidance that goes beyond those universals.
+
+#### Why the constitution matters
+
+Without a constitution, every planning session reinvents architectural decisions from scratch. With one, the AI has clear engineering guardrails: it knows which patterns to follow, what architectural boundaries to respect, which implementation principles to enforce, and where complexity must be justified. The constitution feeds directly into `/speckit.plan` (Stage 4) — where it actively drives technology choices, architecture patterns, testing strategy, and migration approach — and into `/speckit.implement` (Stage 5) — where it enforces consistency across every generated file.
+
+#### Understanding the three context files
+
+| File | Owner | About | Scope |
+|------|-------|-------|-------|
+| **Agent file** (CLAUDE.md etc.) | Engineering | Universal product truths | Entire product/repo |
+| **Constitution** | Engineering | **Architectural decisions & implementation principles** that drive plan & implement | Project/epic set |
+| **Project.md** | Product | **Universal constraints** that bound specifications | Multi-feature project |
+
+- **Agent file**: Universal product architecture that rarely changes ("We deploy to AWS", "All APIs are REST"). The permanent product identity.
+- **Constitution**: Initiative-specific architectural decisions AND overarching implementation principles that `/speckit.plan` and `/speckit.implement` use as guardrails. Goes beyond the agent file to capture decisions specific to this initiative ("Library-First architecture", "TDD mandatory", "Max 3 projects", "All APIs versioned", "Integration tests preferred over mocks").
+- **Project.md**: Out-of-scope exclusions, shared constraints, and feature list that bound what specifications can include. Product-managed — ensures all feature specs stay within agreed boundaries.
+
+#### Create the constitution (`/speckit.constitution`)
+
+The command runs an interactive workflow:
+
+1. **Codebase scan** — Detects existing architectural patterns and technical decisions across 10 categories, so the constitution reflects what you've already built:
+
+   | Category | Architectural decisions it informs |
+   |----------|-----------------------------------|
+   | Testing Philosophy | Test strategy, coverage expectations, TDD vs integration-first |
+   | Code Quality & Standards | Consistency standards, formatting conventions |
+   | Architecture & Modularity | Module boundaries, monorepo structure, dependency direction |
+   | Observability & Debugging | Logging strategy, tracing, monitoring approach |
+   | CI/CD & Deployment | Deployment architecture, infrastructure patterns |
+   | Security & Compliance | Auth approach, secret management, compliance posture |
+   | Versioning & Breaking Changes | API versioning strategy, release process |
+   | Simplicity & Constraints | Complexity budgets, dependency governance |
+   | Migration & Compatibility | Migration strategy, backwards compatibility approach |
+   | Internationalisation (i18n) | Translation architecture, locale handling |
+
+   Each category is classified as **Detected** (strong signals — can draft a principle), **Partial** (some signals — needs confirmation), or **No Signal** (nothing found — needs a question).
+
+2. **Interactive Q&A** — Up to 8 targeted questions, asked one at a time, covering gaps and ambiguities from the scan. Each question offers a recommended option with reasoning, and you can accept, pick an alternative, or provide a short custom answer.
+
+3. **Free-text additions** — After the guided questions, you can add any additional principles in your own words (e.g., "All database migrations must be reversible", "No third-party analytics SDKs").
+
+4. **Constitution generation** — Synthesizes scan results, Q&A answers, and free-text additions into a complete `constitution.md` with versioning, governance, and a derivation log.
+
+```text
+/speckit.constitution
+```
+
+If you already know your principles, provide them directly — the Q&A will confirm and fill gaps:
+
+```text
+/speckit.constitution This project follows TDD strictly. We use a microservices architecture. All APIs must be versioned.
+```
+
+#### Practical guidance
+
+- **Preparation**: Clean up existing repo documentation (README, architecture notes) before drafting. The scan relies on what's in the repo.
+- **Time investment**: Expect 2–3 days of senior engineering time for a thorough constitution on a new initiative.
+- **Focus on architectural decisions**: Document the decisions you actually enforce, not generic best practices. "We use PostgreSQL for all persistent storage" is better than "Use appropriate database technology." These decisions directly constrain what `/speckit.plan` generates.
+- **Start focused**: 5–7 concrete architectural decisions are better than 15 aspirational ones. You can always amend later.
+- **Sign-off**: The constitution includes a Sign-Off table. While advisory, getting engineering and QA alignment before planning prevents rework.
+
+> [!IMPORTANT]
+> The constitution **must be finalized before** `/speckit.plan` (Stage 4) can proceed — the plan reads the constitution to shape technology choices, phase gates, and testing strategy. If you skip this step, `/speckit.plan` will detect the missing constitution and offer to run a condensed Q&A inline — but running the full `/speckit.constitution` command separately produces better, more thorough results.
+
+### Stage 4: Planning (Engineering)
 
 > [!NOTE]
-> The constitution must be finalized before this stage. If you drafted it in Stage 1, review and sign off on it now.
+> The constitution must be finalized before this stage (Stage 3). If you skip the constitution step, `/speckit.plan` will offer to create one inline.
 
 #### Generate a plan (`/speckit.plan`)
 
@@ -662,7 +741,7 @@ You can also ask Claude Code (if you have the [GitHub CLI](https://docs.github.c
 > [!NOTE]
 > Before you have the agent implement it, it's also worth prompting Claude Code to cross-check the details to see if there are any over-engineered pieces (remember - it can be over-eager). If over-engineered components or decisions exist, you can ask Claude Code to resolve them. Ensure that Claude Code follows the [constitution](base/memory/constitution.md) as the foundational piece that it must adhere to when establishing the plan.
 
-### Stage 4: Tasks (Engineering)
+### Stage 5: Tasks (Engineering)
 
 #### Generate task breakdown (`/speckit.tasks`)
 
@@ -678,7 +757,7 @@ This step creates a `tasks.md` file in your feature specification directory that
 - **Dependency management** - Tasks are ordered to respect dependencies between components (e.g., models before services, services before endpoints)
 - **Parallel execution markers** - Tasks that can run in parallel are marked with `[P]` to optimize development workflow
 - **File path specifications** - Each task includes the exact file paths where implementation should occur
-- **Test-driven development structure** - If tests are requested, test tasks are included and ordered to be written before implementation
+- **Constitution-driven testing** - Test tasks follow the constitution's testing philosophy (TDD, test-alongside, or as specified)
 - **Checkpoint validation** - Each user story phase includes checkpoints to validate independent functionality
 - **Jira placeholders** - `[JIRA-EPIC-KEY]` and `[JIRA-XXX]` placeholders for issue tracking integration
 
@@ -728,7 +807,7 @@ The `/speckit.implement` command will:
 - Validate that all prerequisites are in place (constitution, spec, plan, and tasks)
 - Parse the task breakdown from `tasks.md`
 - Execute tasks in the correct order, respecting dependencies and parallel execution markers
-- Follow the TDD approach defined in your task plan
+- Follow the testing approach defined in the constitution (TDD, test-alongside, or as specified)
 - Provide progress updates and handle errors appropriately
 
 > [!IMPORTANT]
