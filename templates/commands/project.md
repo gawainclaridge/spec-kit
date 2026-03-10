@@ -24,14 +24,14 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 This is **Stage 1 (Specification)** of the Unifyr process:
 - **Team**: Product
-- **Purpose**: Create shared context for multi-feature projects
+- **Purpose**: Create universal constraints and shared context that bound all feature specifications in a multi-feature project
 - **Prerequisites**: None
-- **Output**: project.md with out-of-scope, shared constraints, features table
-- **Next step**: `/speckit.specify --project <name>` to add features
+- **Output**: project.md with out-of-scope exclusions, shared constraints, features table — these act as universal boundaries for all specifications
+- **Next step**: `/speckit.specify --project <name>` to add features (specs must stay within project boundaries)
 
 ## Outline
 
-This command creates or manages a project.md file for multi-feature projects. A project groups related specifications that share common context, constraints, and out-of-scope items.
+This command creates or manages a project.md file for multi-feature projects. A project provides **universal constraints that bound what specifications can include** — out-of-scope exclusions, shared constraints, and common context. All feature specs created under a project must respect these boundaries.
 
 ### When to Use Projects
 
@@ -126,12 +126,14 @@ specs/
 
 ### Project vs Spec Scope
 
-| Aspect | Project (project.md) | Feature (spec.md) |
-|--------|---------------------|-------------------|
-| Scope exclusions | Out of Scope (project-wide) | Non-Goals (feature-specific) |
-| Users | Shared target users | Feature-specific user journeys |
-| Constraints | Shared constraints | Feature-specific requirements |
-| Tech decisions | Shared stack (if decided) | Feature-specific implementation |
+Project.md provides **universal constraints** that bound all specifications. Feature specs must stay within these boundaries.
+
+| Aspect | Project (project.md) — bounds specs | Feature (spec.md) — within project bounds |
+|--------|-------------------------------------|------------------------------------------|
+| Scope exclusions | Out of Scope (project-wide exclusions) | Non-Goals (feature-specific, within project bounds) |
+| Users | Shared target users (universal) | Feature-specific user journeys |
+| Constraints | Shared constraints (all specs must respect) | Feature-specific requirements (must not violate shared) |
+| Tech decisions | Shared stack (if decided, inherited by all) | Feature-specific implementation details |
 
 ### Naming Conventions
 

@@ -27,10 +27,10 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ### Workflow Context (Unifyr Process)
 
-This is **Stage 4 (Tasks)** of the Unifyr process:
+This is **Stage 5 (Tasks)** of the Unifyr process:
 - **Team**: Engineering only
 - **Prerequisites**:
-  - plan.md MUST exist (constitution was finalized in Stage 3)
+  - plan.md MUST exist (constitution was finalized in Stage 3, plan created in Stage 4)
   - spec.md MUST exist (for user stories)
 - **Output**: tasks.md (or per-story files) with Jira placeholders
 - **Next steps**: `/speckit.taskstoissues`, `/speckit.implement`
@@ -56,6 +56,7 @@ Check for optional flags in the user input:
 
 2. **Load design documents**: Read from FEATURE_DIR:
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
+   - **Required**: `/memory/constitution.md` (testing philosophy, implementation principles — determines whether and how test tasks are generated)
    - **Optional**: data-model.md (entities), contracts/ (API endpoints), research.md (decisions), quickstart.md (test scenarios)
    - **Check for project context**: Determine if feature is part of a project
      - Check if current directory is under `specs/project-<name>/`
@@ -88,7 +89,7 @@ Check for optional flags in the user input:
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
    - Phase 3+: One phase per user story (in priority order from spec.md)
-   - Each phase includes: story goal, independent test criteria, tests (if requested), implementation tasks
+   - Each phase includes: story goal, independent test criteria, tests (per constitution's testing philosophy), implementation tasks
    - Final Phase: Polish & cross-cutting concerns
    - All tasks must follow the strict checklist format (see Task Generation Rules below)
    - Clear file paths for each task
@@ -128,7 +129,7 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 **CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
 
-**Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
+**Testing approach follows the constitution**: Read `/memory/constitution.md` to determine the testing philosophy. If the constitution mandates TDD, generate test tasks ordered BEFORE their corresponding implementation tasks. If the constitution specifies integration-first testing, generate integration test tasks. If the constitution is silent on testing, generate test tasks alongside implementation (not deferred). Only omit test tasks entirely if the constitution explicitly states no tests are required OR the user explicitly says to skip tests.
 
 ### Checklist Format (REQUIRED)
 
@@ -170,12 +171,12 @@ Every task MUST strictly follow this format:
      - Models needed for that story
      - Services needed for that story
      - Endpoints/UI needed for that story
-     - If tests requested: Tests specific to that story
+     - Tests for that story (per constitution's testing philosophy — TDD, test-alongside, or omit only if constitution/user explicitly says no tests)
    - Mark story dependencies (most stories should be independent)
 
 2. **From Contracts**:
    - Map each contract/endpoint → to the user story it serves
-   - If tests requested: Each contract → contract test task [P] before implementation in that story's phase
+   - If constitution mandates testing: Each contract → contract test task [P] before or alongside implementation in that story's phase (per constitution's testing philosophy)
 
 3. **From Data Model**:
    - Map each entity to the user story(ies) that need it
@@ -189,9 +190,10 @@ Every task MUST strictly follow this format:
 
 ### Phase Structure
 
-- **Phase 1**: Setup (project initialization)
+- **Phase 1**: Setup (project initialization, test framework setup if constitution requires testing)
 - **Phase 2**: Foundational (blocking prerequisites - MUST complete before user stories)
 - **Phase 3+**: User Stories in priority order (P1, P2, P3...)
-  - Within each story: Tests (if requested) → Models → Services → Endpoints → Integration
+  - If constitution mandates TDD: Tests → Models → Services → Endpoints → Integration
+  - If constitution is silent or test-alongside: Models (with tests) → Services (with tests) → Endpoints → Integration
   - Each phase should be a complete, independently testable increment
-- **Final Phase**: Polish & Cross-Cutting Concerns
+- **Final Phase**: Polish & Cross-Cutting Concerns (NOT where tests go — tests belong with their implementation phase)

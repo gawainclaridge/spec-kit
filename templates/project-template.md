@@ -1,7 +1,8 @@
 <!--
   ARTIFACT STABILITY: Very Stable
-  This project definition contains shared context for multiple features.
-  Changes affect all linked specifications.
+  This project definition provides universal constraints that bound all feature specifications.
+  Out-of-scope exclusions and shared constraints apply to ALL specs under this project.
+  Changes affect all linked specifications — amend with care.
 -->
 
 # Project: [PROJECT NAME]
@@ -73,7 +74,7 @@
 <!--
   Document technical decisions that apply to ALL features in this project.
   Feature-specific technical decisions belong in individual plan.md files.
-  Fill this section during Stage 3 (Planning) or leave empty if not yet decided.
+  Fill this section during Stage 4 (Planning) or leave empty if not yet decided.
 -->
 
 ### Technology Stack (Shared)
