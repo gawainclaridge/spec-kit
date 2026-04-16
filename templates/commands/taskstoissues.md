@@ -162,7 +162,7 @@ Epic (Feature)
 
 1. **Create Epic** (if not exists):
    - Title: Feature name from tasks.md
-   - Description: Link to spec.md and plan.md
+   - Description: Start with the **Experience Vision** paragraph from spec.md (the full text, not a link), followed by links to spec.md and plan.md. This ensures the north star is visible directly on the epic without navigating to other documents.
    - Note: If Epic already exists, use existing key
 
 2. **For each User Story phase**:

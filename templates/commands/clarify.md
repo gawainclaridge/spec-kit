@@ -53,6 +53,12 @@ Execution steps:
    - Use project context to reduce redundant clarification questions
 
 3. Load the current spec file. Perform a structured ambiguity & coverage scan using this taxonomy. For each category, mark status: Clear / Partial / Missing. Produce an internal coverage map used for prioritization (do not output raw map unless no questions will be asked).
+   - **Experience Vision gate (BLOCKING)**: Check that the spec contains a completed `## Experience Vision` section with a narrative paragraph (not placeholder text). If missing or still contains placeholder text like "[Write the experience vision here":
+     - Do NOT proceed with the ambiguity scan.
+     - Inform the user: "Experience Vision is missing. This is the north star that both engineering and Product hold up at sprint review — without it, clarification has no anchor. Please describe what success feels like from the customer's perspective (3-5 sentences, plain language, not AC or user stories)."
+     - Wait for the user's response.
+     - Write their response into the `## Experience Vision` section of the spec, replacing the placeholder.
+     - Then proceed with the rest of the clarify workflow.
    - **Project-aware scanning**: If project.md was loaded, consider project-level definitions as "Clear" for spec-level scanning
 
    Functional Scope & Behavior:
