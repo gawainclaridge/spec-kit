@@ -120,26 +120,30 @@ Given that feature description, do this:
          - No reasonable default exists
        - **LIMIT: Maximum 3 [NEEDS CLARIFICATION] markers total**
        - Prioritize clarifications by impact: scope > security/privacy > user experience > technical details
-    4. Fill User Scenarios & Testing section
+    4. Write Experience Vision section
+       A short narrative paragraph (3-5 sentences) describing what success feels like from the customer's perspective.
+       Not acceptance criteria, not user stories — plain language that both engineering and Product can hold up at sprint review.
+       If no clear user experience can be articulated: ERROR "Cannot determine experience vision"
+    5. Fill User Scenarios & Testing section
        If no clear user flow: ERROR "Cannot determine user scenarios"
-    5. Generate Functional Requirements
+    6. Generate Functional Requirements
        Each requirement must be testable
        Use reasonable defaults for unspecified details (document assumptions in Assumptions section)
-    6. Define Success Criteria
+    7. Define Success Criteria
        Create measurable, technology-agnostic outcomes
        Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
        Each criterion must be verifiable without implementation details
-    7. Identify Key Entities (if data involved)
-    8. Fill Non-Goals section
+    8. Identify Key Entities (if data involved)
+    9. Fill Non-Goals section
        - Explicitly list what this feature does NOT include (feature-specific)
        - Consider common scope creep areas
        - **If part of project**: Do NOT duplicate project.md "Out of Scope" items; instead add:
          `> See [project.md](../project.md) for project-level exclusions`
        - Only add feature-specific non-goals that are not already covered at project level
-    9. Initialize Sign-Off table with "Pending" statuses
-    10. Initialize Changelog with version 1.0
-    11. If `--project` mode: Update project.md Features table with new spec
-    12. Return: SUCCESS (spec ready for clarification or planning)
+    10. Initialize Sign-Off table with "Pending" statuses
+    11. Initialize Changelog with version 1.0
+    12. If `--project` mode: Update project.md Features table with new spec
+    13. Return: SUCCESS (spec ready for clarification or planning)
 
 7. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
@@ -156,6 +160,8 @@ Given that feature description, do this:
       
       ## Content Quality
       
+      - [ ] Experience Vision is a clear narrative paragraph (not AC or user stories)
+      - [ ] Experience Vision describes success from the customer's perspective
       - [ ] No implementation details (languages, frameworks, APIs)
       - [ ] Focused on user value and business needs
       - [ ] Written for non-technical stakeholders

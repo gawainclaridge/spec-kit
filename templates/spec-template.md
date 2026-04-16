@@ -13,6 +13,25 @@
 **Project**: [Optional - link to project.md if part of a multi-feature project]
 **Input**: User description: "$ARGUMENTS"
 
+## Experience Vision *(mandatory)*
+
+<!--
+  Write a short narrative paragraph (3-5 sentences) that describes what success
+  feels like from the customer's perspective. Not acceptance criteria, not user
+  stories — a plain-language picture of the ideal experience.
+
+  This is the north star. At sprint review, both engineering and Product hold
+  this up and ask: "does what we built serve this?"
+
+  Example (gamification feature):
+  "A partner rep opens the portal on Monday morning, immediately sees they're
+  200 points behind the leaderboard leader, clicks into an activity they can
+  complete today, and closes the tab feeling like they have a game to play
+  this week."
+-->
+
+[Write the experience vision here. What does success feel like for the customer?]
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
