@@ -516,7 +516,7 @@ After this prompt is entered, you should see Claude Code kick off the planning a
 
 Once this step is completed, you should have a new branch created (e.g., `001-create-taskify`), as well as a new specification in the `specs/001-create-taskify` directory.
 
-The produced specification should contain a set of user stories and functional requirements, as defined in the template.
+The produced specification should contain an **Experience Vision** (a short narrative describing what success feels like from the customer's perspective), user stories, and functional requirements, as defined in the template.
 
 #### Draft project principles (`/speckit.constitution`) — optional
 
@@ -555,7 +555,7 @@ At this stage, your project folder contents should resemble the following:
 
 With the baseline specification created, you can go ahead and clarify any of the requirements that were not captured properly within the first shot attempt.
 
-You should run the structured clarification workflow **before** creating a technical plan to reduce rework downstream.
+You should run the structured clarification workflow **before** creating a technical plan to reduce rework downstream. If the spec is missing an **Experience Vision**, clarify will block and ask you to write one before proceeding — this is the north star that anchors all downstream clarification.
 
 Preferred order:
 

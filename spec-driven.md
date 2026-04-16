@@ -295,7 +295,7 @@ Total: ~12 hours of documentation work
 
 Following the 5-stage process, you have:
 
-- **Stage 1**: A complete feature specification with user stories, non-goals, and acceptance criteria
+- **Stage 1**: A complete feature specification with an Experience Vision, user stories, non-goals, and acceptance criteria
 - **Stage 2**: Clarified requirements with team review and sign-off
 - **Stage 3**: A finalized constitution with engineering principles and governance
 - **Stage 4**: A detailed implementation plan with technology choices, testing scenarios, and migration plans
